@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://df82fhcas7p5r"]
+
+[ext_resource type="Script" uid="uid://b2jp0ud37w4g" path="res://card_ui.gd" id="1_gf2xd"]
+
+[node name="CardUi" type="Control" unique_id=585216862]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_gf2xd")

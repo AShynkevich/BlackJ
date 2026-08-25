@@ -1,0 +1,41 @@
+# Godot 4+ editor cache and imported binaries
+.godot/
+.nomedia
+.import/
+
+# Godot export / platform build folders
+/android/
+/ios/
+export.cfg
+export_credentials.cfg
+
+# Generated translation binaries (from CSV)
+*.translation
+
+# Temporary and editor leftovers
+*.tmp
+*~
+*.bak
+
+# Godot C# / Mono (not used yet, keep ignored if added later)
+.mono/
+data_*/
+mono_crash.*.json
+~*.dll
+
+# Export binaries and packages
+*.apk
+*.aab
+*.ipa
+*.pck
+*.exe
+*.dmg
+*.app
+*.zip
+
+# OS junk
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+Desktop.ini
