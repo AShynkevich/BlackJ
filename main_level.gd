@@ -1,14 +1,31 @@
 extends Control
 
+const STARTING_CREDIT := 100
 
-# Called when the node enters the scene tree for the first time.
+var credit: int = 0
+
+@onready var credit_label: Label = $CreditLabel
+@onready var credit_dialog: ColorRect = $CreditDialog
+@onready var deck_pile: Control = $DeckPile
+
+
 func _ready() -> void:
-	pass
+	credit = 0
+	credit_label.visible = false
+	deck_pile.visible = false
+	credit_dialog.visible = true
 
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
+func _on_credit_ok_pressed() -> void:
+	credit = STARTING_CREDIT
+	_refresh_credit_label()
+	credit_label.visible = true
+	deck_pile.visible = true
+	credit_dialog.visible = false
+
+
+func _refresh_credit_label() -> void:
+	credit_label.text = "Credit: $%d" % credit
 
 
 func _on_main_menu_pressed() -> void:

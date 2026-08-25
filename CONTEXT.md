@@ -6,7 +6,74 @@ Blackjack for mobile and desktop, built in Godot 4.7. This file records the curr
 
 ## Goal
 
-Ship a full Blackjack game that plays the same on a phone (tap) and on desktop (mouse). Right now this is a scaffold: a menu, a table, deck generation, and a card UI stub. There is no gameplay round yet (bets, deal, Hit/Stand, dealer, result).
+Ship a Blackjack game that plays the same on a phone (tap) and on desktop (mouse). First ship a **classic table prototype**. A **Duel** mode (alternating hits, late raise) is a later, separate mode — do not mix those rules into the prototype.
+
+## Game concept (locked)
+
+Classic Blackjack, one player vs a computer dealer. Locked for the first playable prototype. Change this section only if the rules change on purpose.
+
+### Bank and bets
+
+- Player starts a session with **$100**.
+- Before each round the player picks a bet: **$10 / $25 / $50**.
+- Bet cannot exceed remaining credit. If credit is **$0**, the session ends (or offer a refill later — not in v1).
+- Payouts for v1: win pays **1:1**, natural Blackjack also **1:1**, push returns the bet. 3:2 on Blackjack can wait.
+
+### Visibility (who sees what)
+
+- Player cards are **face up**. The player must see their hand. Showing them on the table is fine and matches a shoe game.
+- Dealer: one card **face up**, one **hole card** face down until the dealer plays / the round resolves.
+- The player sees the dealer's up card and never the hole card until reveal.
+- Fair dealer means the AI **does not read the player's hand**. It only uses its own total and the house rule. Do not hide the player's cards from the screen to achieve that.
+
+### Deal
+
+- After the bet: two cards to the player (face up), two to the dealer (one up, one down).
+- Deck is `Array[CardData]`. Instantiate `CardUI` only for cards that leave the deck.
+
+### Natural Blackjack
+
+- Ace + 10-value on the **first two cards** is a natural.
+- If the player has a natural and the dealer does not → player wins immediately (no Hit/Stand).
+- If both have a natural → push.
+- If only the dealer has a natural → player loses immediately.
+- 21 from three or more cards is not a natural.
+
+### Player turn
+
+- Actions: **Hit** or **Stand** only.
+- Player hits until they stand or bust (**total > 21**).
+- Bust → player loses immediately. Dealer does not play.
+- No Double, Split, Insurance, or late raise in this mode.
+
+### Dealer turn
+
+- Runs only if the player stood without busting.
+- Hole card is revealed, then the dealer plays.
+- House rule: **hit while total is below 17**, **stand on 17 or more** (including soft 17 for v1).
+- Dealer AI must not inspect player cards or player total.
+
+### Scoring
+
+- Ace counts as **11**, or **1** when 11 would bust (soft/hard Ace).
+- After both have finished: higher total **≤ 21** wins.
+- Same total → **push**.
+- If the dealer busts and the player did not → player wins.
+
+### Round loop
+
+1. Choose bet (if credit allows).
+2. Deal.
+3. Resolve naturals if any.
+4. Player Hit/Stand (or already lost on bust).
+5. Dealer plays if needed.
+6. Compare, pay, return cards / rebuild the deck as needed.
+7. Next round.
+
+### Out of scope (later)
+
+- **Duel mode:** alternating Hit/Stand, then a late raise (nothing / +10 / +25 / +50 / ×2). Separate rules, separate flow.
+- Split, Insurance, Double Down, 3:2 Blackjack, multi-deck shoe, chip animations.
 
 ## Engine and settings
 
@@ -29,10 +96,12 @@ Ship a full Blackjack game that plays the same on a phone (tap) and on desktop (
 ### Table (`main_level.tscn` + `main_level.gd`)
 
 - Full-screen table background `assets/table.png`.
-- **TO MENU** → back to `menu.tscn`.
+- **TO MENU** (top-right) → back to `menu.tscn`.
 - Child node `DeckManager` uses `scripts/deck_manager.gd`.
 - Entering the scene generates the deck and shuffles it immediately (`DeckManager._ready`).
-- No hands, score, chips, or action buttons on the table yet.
+- Session start: modal confirms **$100** starting credit. OK awards `credit`, shows **Credit: $N** top-left, and reveals the face-down deck pile (right side, `card_back.tres`).
+- Credit stays `0` until OK. The overlay blocks the table until then.
+- No hands, bet chips, or Hit/Stand yet.
 
 ### Card data (`scripts/card_data.gd`)
 
@@ -61,10 +130,11 @@ Ace is always 11. Soft/hard Ace (11 ↔ 1) is not implemented.
 
 `CardUI` class (`Control`):
 
-- `data: CardData` updates the texture.
-- `is_face_up` toggles face / back `assets/cards/cards-back.png`.
+- Scene root is `CardUI` (`Control`) with `card_ui.gd`. Child `TextureRect` draws the face or back.
+- Fixed size `120×223` (`CARD_SIZE`) — same aspect as one cell of `card-deck.png`.
+- Face texture comes from `CardData.texture` (cut in `DeckManager`).
+- Back texture is `assets/cards/card_back.tres` (`AtlasTexture` over `cards-back.png`). Region is already cropped in the editor.
 - `card_pressed(card: CardUI)` fires on left click; on mobile a tap arrives as the same left-button event.
-- **Scene is incomplete:** `card_ui.tscn` has no child `TextureRect`, but the script expects `$TextureRect`. Instantiating it as-is will fail.
 - No card is spawned on the table yet.
 
 ## Assets
@@ -74,19 +144,21 @@ Ace is always 11. Soft/hard Ace (11 ↔ 1) is not implemented.
 | `assets/bj_logo.png` | Menu logo |
 | `assets/table.png` | Table background |
 | `assets/cards/card-deck.png` | 13×4 face spritesheet |
-| `assets/cards/cards-back.png` | Card back |
+| `assets/cards/cards-back.png` | Card-back spritesheet (several designs) |
+| `assets/cards/card_back.tres` | AtlasTexture for one cropped card back |
 | `icon.svg` | Project icon (Godot default) |
 
 Keep the matching `.import` files in git. Compiled `.ctex` files live under `.godot/` and stay out of the repo.
 
 ## What is not done yet
 
-- Deal to player and dealer, including the dealer's hole card.
-- Hit / Stand / Double / Split / Insurance buttons.
-- Scoring, soft Ace, Blackjack, Bust, Push.
-- Bets, bankroll, chips.
+- Round flow from the locked concept: bet → deal → naturals → Hit/Stand → dealer rule → payout.
+- Soft Ace (11 ↔ 1), bust, push, natural vs 21 from extra cards.
+- Bet buttons ($10 / $25 / $50) after the deck is on the table.
+- Spawn `CardUI` only for dealt cards; dealer hole card uses `is_face_up = false`.
 - Deal and flip animations.
 - Adaptive layout for portrait/landscape (buttons use absolute offsets).
+- Duel mode.
 - Audio, localization, saves.
 - Export presets for Android / iOS / desktop.
 
@@ -109,9 +181,12 @@ menu.tscn          ← entry point
 
 main_level.tscn
   ├─ TextureRect (table)
+  ├─ CreditLabel (hidden until OK)
   ├─ Button TO MENU → menu.tscn
-  └─ DeckManager (scripts/deck_manager.gd)
-       └─ generate + shuffle 52 CardData
+  ├─ DeckPile (hidden until OK, card_back.tres)
+  ├─ DeckManager (scripts/deck_manager.gd)
+  │    └─ generate + shuffle 52 CardData
+  └─ CreditDialog → OK awards $100, shows credit + deck
 ```
 
 ## Conventions for later work
@@ -121,8 +196,9 @@ main_level.tscn
 - Commit `*.gd.uid` and `*.import` next to their sources. Do not gitignore `*.uid`.
 - Do not commit `.godot/`.
 - Wire input through `_gui_input` / button signals so tap and click behave the same.
-- Keep Blackjack rules out of menu scenes. Deal and scoring belong in scripts next to `scripts/`.
-- Next sensible step: fix `card_ui.tscn` (add `TextureRect`), teach the deck to deal a card, lay out two hands, and hook Hit/Stand.
+- Keep Blackjack rules out of menu scenes. Deal, scoring, and dealer AI belong in scripts next to `scripts/`.
+- Dealer AI may use only the dealer hand and the hit-below-17 rule.
+- Next sensible step: bet buttons ($10 / $25 / $50), then deal two hands from the pile.
 
 ## Git
 

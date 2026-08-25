@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://bmuqj304q8urj" path="res://main_level.gd" id="1_6614m"]
 [ext_resource type="Texture2D" uid="uid://j17043fnbiwg" path="res://assets/table.png" id="2_bhu08"]
 [ext_resource type="Script" uid="uid://bvbgtrw7dgwfp" path="res://scripts/deck_manager.gd" id="3_bhu08"]
+[ext_resource type="Texture2D" uid="uid://deqs1dvgbv3tc" path="res://assets/cards/card_back.tres" id="4_back"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6614m"]
 bg_color = Color(0.81960785, 0.7294118, 0.38039216, 1)
@@ -11,7 +12,19 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[node name="MainLevel" type="Control" unique_id=1564848126]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
+bg_color = Color(0.12, 0.12, 0.12, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.81960785, 0.7294118, 0.38039216, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="MainLevel" type="Control" unique_id=1007985574]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,35 +33,155 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6614m")
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=1830472159]
+[node name="TextureRect" type="TextureRect" parent="." unique_id=693884431]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("2_bhu08")
 expand_mode = 1
 
-[node name="StartButton" type="Button" parent="." unique_id=417150380]
+[node name="CreditLabel" type="Label" parent="." unique_id=1614531775]
+visible = false
+layout_mode = 1
+offset_left = 24.0
+offset_top = 20.0
+offset_right = 320.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
+theme_override_font_sizes/font_size = 28
+text = "Credit: $0"
+
+[node name="StartButton" type="Button" parent="." unique_id=1010501081]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -184.0
+offset_top = 16.0
+offset_right = -24.0
+offset_bottom = 64.0
+grow_horizontal = 0
+theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_6614m")
+text = "TO MENU"
+
+[node name="DeckPile" type="Control" parent="." unique_id=335570229]
+visible = false
+custom_minimum_size = Vector2(144, 247)
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -123.0
+offset_right = -48.0
+offset_bottom = 124.0
+grow_horizontal = 0
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Stack2" type="TextureRect" parent="DeckPile" unique_id=1343382367]
+modulate = Color(0.7, 0.7, 0.7, 1)
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 128.0
+offset_bottom = 231.0
+mouse_filter = 2
+texture = ExtResource("4_back")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Stack1" type="TextureRect" parent="DeckPile" unique_id=1889044766]
+modulate = Color(0.85, 0.85, 0.85, 1)
+layout_mode = 0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 124.0
+offset_bottom = 227.0
+mouse_filter = 2
+texture = ExtResource("4_back")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TopCard" type="TextureRect" parent="DeckPile" unique_id=2099469059]
+layout_mode = 0
+offset_right = 120.0
+offset_bottom = 223.0
+mouse_filter = 2
+texture = ExtResource("4_back")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="DeckManager" type="Node" parent="." unique_id=947934991]
+script = ExtResource("3_bhu08")
+
+[node name="CreditDialog" type="ColorRect" parent="." unique_id=1191525856]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.55)
+
+[node name="Panel" type="Panel" parent="CreditDialog" unique_id=1473808988]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 337.0
-offset_top = -289.0
-offset_right = 545.0
-offset_bottom = -235.0
+offset_left = -260.0
+offset_top = -140.0
+offset_right = 260.0
+offset_bottom = 140.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
-theme_override_font_sizes/font_size = 36
-theme_override_styles/normal = SubResource("StyleBoxFlat_6614m")
-text = "TO MENU"
+theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
 
-[node name="DeckManager" type="Node" parent="." unique_id=54152631]
-script = ExtResource("3_bhu08")
+[node name="Message" type="Label" parent="CreditDialog/Panel" unique_id=1349757703]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 28.0
+offset_top = 36.0
+offset_right = -28.0
+offset_bottom = 160.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
+theme_override_font_sizes/font_size = 26
+text = "You have been awarded $100 starting credit."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="OkButton" type="Button" parent="CreditDialog/Panel" unique_id=1532584779]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -80.0
+offset_top = -88.0
+offset_right = 80.0
+offset_bottom = -28.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_6614m")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_6614m")
+theme_override_styles/hover = SubResource("StyleBoxFlat_6614m")
+text = "OK"
 
 [connection signal="pressed" from="StartButton" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="CreditDialog/Panel/OkButton" to="." method="_on_credit_ok_pressed"]
