@@ -12,6 +12,13 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bet"]
+bg_color = Color(0.81960785, 0.7294118, 0.38039216, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
 bg_color = Color(0.12, 0.12, 0.12, 0.96)
 border_width_left = 2
@@ -55,6 +62,17 @@ theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
 theme_override_font_sizes/font_size = 28
 text = "Credit: $0"
 
+[node name="BetLabel" type="Label" parent="." unique_id=1122729695]
+visible = false
+layout_mode = 1
+offset_left = 24.0
+offset_top = 58.0
+offset_right = 320.0
+offset_bottom = 98.0
+theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
+theme_override_font_sizes/font_size = 24
+text = "Bet: $0"
+
 [node name="StartButton" type="Button" parent="." unique_id=1010501081]
 layout_mode = 1
 anchors_preset = 1
@@ -90,10 +108,10 @@ mouse_filter = 2
 [node name="Stack2" type="TextureRect" parent="DeckPile" unique_id=1343382367]
 modulate = Color(0.7, 0.7, 0.7, 1)
 layout_mode = 0
-offset_left = 8.0
-offset_top = 8.0
-offset_right = 128.0
-offset_bottom = 231.0
+offset_left = 4.0
+offset_top = 4.0
+offset_right = 124.0
+offset_bottom = 184.0
 mouse_filter = 2
 texture = ExtResource("4_back")
 expand_mode = 1
@@ -102,10 +120,10 @@ stretch_mode = 5
 [node name="Stack1" type="TextureRect" parent="DeckPile" unique_id=1889044766]
 modulate = Color(0.85, 0.85, 0.85, 1)
 layout_mode = 0
-offset_left = 4.0
-offset_top = 4.0
-offset_right = 124.0
-offset_bottom = 227.0
+offset_left = 2.0
+offset_top = 2.0
+offset_right = 122.0
+offset_bottom = 182.0
 mouse_filter = 2
 texture = ExtResource("4_back")
 expand_mode = 1
@@ -114,23 +132,84 @@ stretch_mode = 5
 [node name="TopCard" type="TextureRect" parent="DeckPile" unique_id=2099469059]
 layout_mode = 0
 offset_right = 120.0
-offset_bottom = 223.0
+offset_bottom = 180.0
 mouse_filter = 2
 texture = ExtResource("4_back")
 expand_mode = 1
 stretch_mode = 5
 
+[node name="DealerHand" type="HBoxContainer" parent="." unique_id=1691636903]
+propagate_maximum_size = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -140.0
+offset_top = 80.0
+offset_right = 140.0
+offset_bottom = 260.0
+grow_horizontal = 2
+mouse_filter = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="PlayerHand" type="HBoxContainer" parent="." unique_id=749334961]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -140.0
+offset_top = -272.0
+offset_right = 140.0
+offset_bottom = -92.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="BetPanel" type="HBoxContainer" parent="." unique_id=347929041]
+visible = false
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -280.0
+offset_top = -100.0
+offset_right = 280.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="DealButton" type="Button" parent="BetPanel" unique_id=1648599101]
+custom_minimum_size = Vector2(140, 64)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_bet")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bet")
+theme_override_styles/hover = SubResource("StyleBoxFlat_bet")
+disabled = true
+text = "DEAL"
+
 [node name="DeckManager" type="Node" parent="." unique_id=947934991]
 script = ExtResource("3_bhu08")
 
 [node name="CreditDialog" type="ColorRect" parent="." unique_id=1191525856]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 0.55)
+color = Color(0, 0, 0, 0.4862745)
 
 [node name="Panel" type="Panel" parent="CreditDialog" unique_id=1473808988]
 layout_mode = 1
@@ -184,4 +263,5 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_6614m")
 text = "OK"
 
 [connection signal="pressed" from="StartButton" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="BetPanel/DealButton" to="." method="_on_deal_pressed"]
 [connection signal="pressed" from="CreditDialog/Panel/OkButton" to="." method="_on_credit_ok_pressed"]

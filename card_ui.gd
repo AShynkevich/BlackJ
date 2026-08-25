@@ -3,8 +3,8 @@ extends Control
 
 signal card_pressed(card: CardUI)
 
-## On-screen card size. Matches the face-sheet cell aspect (~128:237).
-const CARD_SIZE := Vector2(120, 223)
+## On-screen slot. Must match tools/generate_face_sheet.py cell size (1:1 pixels).
+const CARD_SIZE := Vector2(120, 180)
 
 @onready var texture_rect: TextureRect = $TextureRect
 
@@ -26,6 +26,10 @@ var is_face_up: bool = true:
 func _ready() -> void:
 	custom_minimum_size = CARD_SIZE
 	size = CARD_SIZE
+	#size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	#size_flags_vertical = Control.SIZE_SHRINK_CENTER
+	#texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	#texture_rect.stretch_mode = TextureRect.STRETCH_SCALE
 	_update_visuals()
 
 

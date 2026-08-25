@@ -33,6 +33,9 @@ mono_crash.*.json
 *.app
 *.zip
 
+# Local tool venvs
+tools/.venv/
+
 # OS junk
 .DS_Store
 .AppleDouble

@@ -1,0 +1,12 @@
+---
+description: Apply project architecture skills on every BlackJ code change
+alwaysApply: true
+---
+
+When writing or changing game code, follow the project skills:
+
+- `.cursor/skills/dry-yagni-kiss/SKILL.md` — DRY, YAGNI, KISS
+- `.cursor/skills/solid-principles/SKILL.md` — SOLID mapped to scenes/scripts
+- `.cursor/skills/gamedev-patterns/SKILL.md` — Godot-friendly game patterns
+
+Read a skill before adding a new script, type, or manager. Locked rules stay in `CONTEXT.md`. English for comments, docs, and commits.
