@@ -79,7 +79,7 @@ Classic Blackjack, one player vs a computer dealer. Locked for the first playabl
 
 - Godot **4.7**, **GL Compatibility** renderer (desktop and mobile).
 - Startup scene: `menu.tscn` (`project.godot` → `run/main_scene`).
-- Window: `canvas_items` + `aspect=expand` — the scene scales to different resolutions.
+- Window: base **1280×720**, `canvas_items` + `aspect=expand`. Table and menu use containers + a safe-area margin so portrait and landscape reflow.
 - 3D physics (Jolt) comes from the project template and is unused.
 - Project icon is the default Godot `icon.svg`, not branded.
 
@@ -88,7 +88,7 @@ Classic Blackjack, one player vs a computer dealer. Locked for the first playabl
 ### Main menu (`menu.tscn` + `menu.gd`)
 
 - Full-screen dark background (`ColorRect`).
-- Logo `assets/bj_logo.png` in the top panel.
+- Logo `assets/bj_logo.png` in a centered column with START / EXIT.
 - **START** → `main_level.tscn`.
 - **EXIT** → `get_tree().quit()`.
 - Button styles are set by hand (gold `StyleBoxFlat`, dark text).
@@ -108,6 +108,7 @@ Classic Blackjack, one player vs a computer dealer. Locked for the first playabl
 - Session phase enum lives on `BlackjackFlow`: Credit → Betting → PlayerTurn → DealerTurn → Resolve.
 - `BlackjackFlow` owns credit, bets, hands, and who acts. It emits signals; `main_level.gd` only builds buttons and `CardUI`.
 - Rules live in `scripts/blackjack_rules.gd` (`BlackjackRules`): soft Ace total, natural, bust, dealer hit-below-17.
+- Adaptive layout: padded `SafeArea`, vertical table stack, horizontal bet row, shoe inset on the right.
 
 ### Card data (`scripts/card_data.gd`)
 
@@ -159,7 +160,6 @@ Keep the matching `.import` files in git. Compiled `.ctex` files live under `.go
 
 ## What is not done yet
 
-- Adaptive layout for portrait/landscape (buttons use absolute offsets).
 - Duel mode.
 - Audio, localization, saves.
 - Export presets for Android / iOS / desktop.
@@ -173,9 +173,11 @@ menu.tscn          ← entry point
 
 main_level.tscn
   ├─ TextureRect (table)
+  ├─ SafeArea (MarginContainer)
+  │    └─ VBox: TopBar / dealer / result / player / actions
   ├─ CreditLabel / BetLabel (hidden until OK)
   ├─ Button TO MENU → menu.tscn
-  ├─ DeckPile (hidden until OK, card_back.tres)
+  ├─ DeckPile (hidden until OK, card_back.tres; floats on the right)
   ├─ DealerHand / PlayerHand (HBox, cards on DEAL)
   ├─ DealerScoreLabel / PlayerScoreLabel / ResultLabel
   ├─ BetPanel ($10 / $25 / $50 + DEAL)
@@ -199,7 +201,7 @@ main_level.tscn
 - Keep Blackjack rules out of menu scenes. Session flow is `blackjack_flow.gd`; totals and dealer hit-below-17 are `blackjack_rules.gd`.
 - Do not add a second `deck_manager.gd` in the project root.
 - Dealer AI may use only the dealer hand and the hit-below-17 rule.
-- Next sensible step: adaptive layout, then Duel as a separate mode.
+- Next sensible step: Duel as a separate mode.
 
 ## Git
 

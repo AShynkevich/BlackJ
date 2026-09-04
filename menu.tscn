@@ -3,9 +3,6 @@
 [ext_resource type="Texture2D" uid="uid://c3schkv2adahj" path="res://assets/bj_logo.png" id="1_lti8b"]
 [ext_resource type="Script" uid="uid://dioww2proiaw2" path="res://menu.gd" id="1_ouk20"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_5x44q"]
-texture = ExtResource("1_lti8b")
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ncy80"]
 bg_color = Color(0.53949934, 0.4693563, 0.19943395, 1)
 corner_radius_top_left = 10
@@ -13,7 +10,7 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[node name="Control" type="Control" unique_id=63616205]
+[node name="Control" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,7 +19,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ouk20")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=150908662]
+[node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -31,56 +28,53 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.07450981, 0.07450981, 0.07450981, 1)
 
-[node name="Panel" type="Panel" parent="." unique_id=695000085]
+[node name="SafeArea" type="MarginContainer" parent="."]
 layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -233.0
-offset_right = 233.0
-offset_bottom = 405.0
-grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxTexture_5x44q")
-
-[node name="ExitButton" type="Button" parent="." unique_id=1154891862]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -104.0
-offset_top = 177.0
-offset_right = 100.0
-offset_bottom = 262.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
-theme_override_font_sizes/font_size = 44
-theme_override_styles/normal = SubResource("StyleBoxFlat_ncy80")
-theme_override_styles/hover = SubResource("StyleBoxFlat_ncy80")
-theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ncy80")
-text = "EXIT"
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
 
-[node name="StartButton" type="Button" parent="." unique_id=941537894]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -104.0
-offset_top = 78.0
-offset_right = 100.0
-offset_bottom = 163.0
-grow_horizontal = 2
-grow_vertical = 2
+[node name="Center" type="CenterContainer" parent="SafeArea"]
+layout_mode = 2
+
+[node name="MenuColumn" type="VBoxContainer" parent="SafeArea/Center"]
+custom_minimum_size = Vector2(460, 0)
+layout_mode = 2
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="Logo" type="TextureRect" parent="SafeArea/Center/MenuColumn"]
+custom_minimum_size = Vector2(460, 400)
+layout_mode = 2
+texture = ExtResource("1_lti8b")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StartButton" type="Button" parent="SafeArea/Center/MenuColumn"]
+custom_minimum_size = Vector2(200, 72)
+layout_mode = 2
 theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
-theme_override_font_sizes/font_size = 44
+theme_override_font_sizes/font_size = 40
 theme_override_styles/normal = SubResource("StyleBoxFlat_ncy80")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ncy80")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ncy80")
 text = "START"
 
-[connection signal="pressed" from="ExitButton" to="." method="_on_exit_pressed"]
-[connection signal="pressed" from="StartButton" to="." method="_on_start_pressed"]
+[node name="ExitButton" type="Button" parent="SafeArea/Center/MenuColumn"]
+custom_minimum_size = Vector2(200, 72)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
+theme_override_font_sizes/font_size = 40
+theme_override_styles/normal = SubResource("StyleBoxFlat_ncy80")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ncy80")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ncy80")
+text = "EXIT"
+
+[connection signal="pressed" from="SafeArea/Center/MenuColumn/ExitButton" to="." method="_on_exit_pressed"]
+[connection signal="pressed" from="SafeArea/Center/MenuColumn/StartButton" to="." method="_on_start_pressed"]

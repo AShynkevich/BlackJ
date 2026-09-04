@@ -14,20 +14,20 @@ var _pending_result: String = ""
 var _flight_layer: Control
 
 @onready var flow: Node = $BlackjackFlow
-@onready var credit_label: Label = $CreditLabel
-@onready var bet_label: Label = $BetLabel
-@onready var player_score_label: Label = $PlayerScoreLabel
-@onready var dealer_score_label: Label = $DealerScoreLabel
-@onready var result_label: Label = $ResultLabel
-@onready var credit_dialog: ColorRect = $CreditDialog
-@onready var session_message: Label = $CreditDialog/Panel/Message
-@onready var deck_pile: Control = $DeckPile
-@onready var bet_panel: HBoxContainer = $BetPanel
-@onready var deal_button: Button = $BetPanel/DealButton
-@onready var decision_panel: HBoxContainer = $DecisionPanel
-@onready var result_panel: HBoxContainer = $ResultPanel
-@onready var dealer_hand_box: HBoxContainer = $DealerHand
-@onready var player_hand_box: HBoxContainer = $PlayerHand
+@onready var credit_label: Label = $%CreditLabel
+@onready var bet_label: Label = $%BetLabel
+@onready var player_score_label: Label = $%PlayerScoreLabel
+@onready var dealer_score_label: Label = $%DealerScoreLabel
+@onready var result_label: Label = $%ResultLabel
+@onready var credit_dialog: ColorRect = $%CreditDialog
+@onready var session_message: Label = $%Message
+@onready var deck_pile: Control = $%DeckPile
+@onready var bet_panel: HBoxContainer = $%BetPanel
+@onready var deal_button: Button = $%DealButton
+@onready var decision_panel: HBoxContainer = $%DecisionPanel
+@onready var result_panel: HBoxContainer = $%ResultPanel
+@onready var dealer_hand_box: HBoxContainer = $%DealerHand
+@onready var player_hand_box: HBoxContainer = $%PlayerHand
 @onready var deck_manager: Node = $DeckManager
 
 
