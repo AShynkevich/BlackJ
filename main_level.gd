@@ -1,6 +1,8 @@
 extends Control
 
 const CARD_SCENE := preload("res://card_ui.tscn")
+const CREDIT_MESSAGE := "You have been awarded $100 starting credit."
+const LOSE_MESSAGE := "You are out of credit. Press OK to return to the main menu."
 
 @export var bet_amounts: Array[int] = [10, 25, 50]
 @export var bet_button_size := Vector2(100, 64)
@@ -14,12 +16,12 @@ var bet_buttons: Array[Button] = []
 @onready var dealer_score_label: Label = $DealerScoreLabel
 @onready var result_label: Label = $ResultLabel
 @onready var credit_dialog: ColorRect = $CreditDialog
+@onready var session_message: Label = $CreditDialog/Panel/Message
 @onready var deck_pile: Control = $DeckPile
 @onready var bet_panel: HBoxContainer = $BetPanel
 @onready var deal_button: Button = $BetPanel/DealButton
 @onready var decision_panel: HBoxContainer = $DecisionPanel
 @onready var result_panel: HBoxContainer = $ResultPanel
-@onready var next_button: Button = $ResultPanel/NextButton
 @onready var dealer_hand_box: HBoxContainer = $DealerHand
 @onready var player_hand_box: HBoxContainer = $PlayerHand
 @onready var deck_manager: Node = $DeckManager
@@ -38,6 +40,7 @@ func _ready() -> void:
 	credit_label.visible = false
 	bet_label.visible = false
 	deck_pile.visible = false
+	session_message.text = CREDIT_MESSAGE
 	credit_dialog.visible = true
 	_on_phase_changed(flow.Phase.CREDIT)
 
@@ -67,6 +70,9 @@ func _make_table_button(text: String, min_size: Vector2) -> Button:
 
 
 func _on_credit_ok_pressed() -> void:
+	if flow.phase != flow.Phase.CREDIT:
+		_on_main_menu_pressed()
+		return
 	credit_label.visible = true
 	bet_label.visible = true
 	deck_pile.visible = true
@@ -102,7 +108,7 @@ func _on_next_pressed() -> void:
 func _on_phase_changed(phase: int) -> void:
 	bet_panel.visible = phase == flow.Phase.BETTING
 	decision_panel.visible = phase == flow.Phase.PLAYER_TURN
-	result_panel.visible = phase == flow.Phase.RESOLVE
+	result_panel.visible = phase == flow.Phase.RESOLVE and flow.credit > 0
 	_refresh_scores()
 
 
@@ -142,9 +148,10 @@ func _on_hands_cleared() -> void:
 
 func _on_round_resolved(message: String) -> void:
 	result_label.text = message
-	if flow.credit <= 0:
-		result_label.text += " No credit left."
-	next_button.disabled = flow.credit <= 0
+	if flow.credit > 0:
+		return
+	session_message.text = LOSE_MESSAGE
+	credit_dialog.visible = true
 
 
 func _refresh_scores() -> void:
