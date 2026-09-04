@@ -16,7 +16,7 @@ Classic Blackjack, one player vs a computer dealer. Locked for the first playabl
 
 - Player starts a session with **$100**.
 - Before each round the player picks a bet: **$10 / $25 / $50**.
-- Bet cannot exceed remaining credit. If credit is **$0**, the session ends (or offer a refill later — not in v1).
+- Bet cannot exceed remaining credit. If credit is **$0**, a lose confirmation returns the player to the main menu (no refill in v1).
 - Payouts for v1: win pays **1:1**, natural Blackjack also **1:1**, push returns the bet. 3:2 on Blackjack can wait.
 
 ### Visibility (who sees what)
@@ -104,6 +104,7 @@ Classic Blackjack, one player vs a computer dealer. Locked for the first playabl
 - After OK: bet buttons are built from Inspector `@export var bet_amounts` (default 10/25/50). One handler: `_on_bet_chosen(amount)`. **DEAL** locks the bet and deals.
 - Deal is a loop: `opening_cards_each` times (player face up, then dealer). The dealer's last card is face down when `hide_dealer_last_card` is on.
 - After deal: naturals resolve immediately. Otherwise **HIT / STAND**. Bust loses at once. Stand runs the dealer (reveal hole, hit below 17). Then payout 1:1 / push / lose and **NEXT** starts a new bet.
+- If credit hits **$0**, NEXT is hidden. The same session modal says the player is out of credit; OK returns to `menu.tscn`.
 - Session phase enum lives on `BlackjackFlow`: Credit → Betting → PlayerTurn → DealerTurn → Resolve.
 - `BlackjackFlow` owns credit, bets, hands, and who acts. It emits signals; `main_level.gd` only builds buttons and `CardUI`.
 - Rules live in `scripts/blackjack_rules.gd` (`BlackjackRules`): soft Ace total, natural, bust, dealer hit-below-17.
@@ -141,6 +142,7 @@ Soft Ace (11 ↔ 1) is applied in `BlackjackRules.hand_total`, not on the resour
 - Back texture is `assets/cards/card_back.tres` (`AtlasTexture` over `cards-back.png`). Region is already cropped in the editor.
 - `card_pressed(card: CardUI)` fires on left click; on mobile a tap arrives as the same left-button event.
 - Hands spawn `CardUI` on deal: player face up, dealer one up and one down.
+- Deal flies each card from the shoe face down. A card appears in a hand only after its flight finishes. Then the player cards and the dealer's up card flip together. The hole card stays down until reveal. Hit/Stand/Next wait until the motion finishes.
 
 ## Assets
 
@@ -157,7 +159,6 @@ Keep the matching `.import` files in git. Compiled `.ctex` files live under `.go
 
 ## What is not done yet
 
-- Deal and flip animations.
 - Adaptive layout for portrait/landscape (buttons use absolute offsets).
 - Duel mode.
 - Audio, localization, saves.
@@ -184,7 +185,7 @@ main_level.tscn
   │    └─ generate + shuffle + draw_card
   ├─ BlackjackFlow (scripts/blackjack_flow.gd)
   │    └─ credit, bet, deal, Hit/Stand, dealer, payout
-  └─ CreditDialog → OK awards $100, shows credit + deck + bets
+  └─ CreditDialog → OK awards $100, or confirms a broke session and returns to the menu
 ```
 
 ## Conventions for later work
@@ -198,7 +199,7 @@ main_level.tscn
 - Keep Blackjack rules out of menu scenes. Session flow is `blackjack_flow.gd`; totals and dealer hit-below-17 are `blackjack_rules.gd`.
 - Do not add a second `deck_manager.gd` in the project root.
 - Dealer AI may use only the dealer hand and the hit-below-17 rule.
-- Next sensible step: polish (animations, broke-session UX), then Duel as a separate mode.
+- Next sensible step: adaptive layout, then Duel as a separate mode.
 
 ## Git
 
