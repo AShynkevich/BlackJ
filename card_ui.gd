@@ -5,6 +5,8 @@ signal card_pressed(card: CardUI)
 
 ## On-screen slot. Must match tools/generate_face_sheet.py cell size (1:1 pixels).
 const CARD_SIZE := Vector2(120, 180)
+const DEAL_SECONDS := 0.28
+const FLIP_SECONDS := 0.12
 
 @onready var texture_rect: TextureRect = $TextureRect
 
@@ -22,15 +24,43 @@ var is_face_up: bool = true:
 		is_face_up = value
 		_update_visuals()
 
+## After the deal flight, flip this card if it belongs face up.
+var reveal_when_dealt: bool = false
+
 
 func _ready() -> void:
 	custom_minimum_size = CARD_SIZE
 	size = CARD_SIZE
-	#size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	#size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	#texture_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	#texture_rect.stretch_mode = TextureRect.STRETCH_SCALE
+	pivot_offset = CARD_SIZE * 0.5
 	_update_visuals()
+
+
+## Fly from the shoe to a hand slot. The card is visible only during this flight.
+func animate_deal_from(from_global: Vector2, to_global: Vector2) -> void:
+	top_level = true
+	global_position = from_global
+	modulate.a = 1.0
+	var tween := create_tween()
+	tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	tween.tween_property(self, "global_position", to_global, DEAL_SECONDS)
+	await tween.finished
+	if not is_inside_tree():
+		return
+	top_level = false
+	global_position = to_global
+
+
+## Turn the card face up with a short scale flip.
+func animate_flip_up() -> void:
+	if is_face_up:
+		return
+	pivot_offset = size * 0.5
+	var tween := create_tween()
+	tween.set_trans(Tween.TRANS_SINE)
+	tween.tween_property(self, "scale", Vector2(0.01, 1), FLIP_SECONDS)
+	tween.tween_callback(func() -> void: is_face_up = true)
+	tween.tween_property(self, "scale", Vector2.ONE, FLIP_SECONDS)
+	await tween.finished
 
 
 func _update_visuals() -> void:

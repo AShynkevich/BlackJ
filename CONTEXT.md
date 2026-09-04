@@ -142,6 +142,7 @@ Soft Ace (11 ↔ 1) is applied in `BlackjackRules.hand_total`, not on the resour
 - Back texture is `assets/cards/card_back.tres` (`AtlasTexture` over `cards-back.png`). Region is already cropped in the editor.
 - `card_pressed(card: CardUI)` fires on left click; on mobile a tap arrives as the same left-button event.
 - Hands spawn `CardUI` on deal: player face up, dealer one up and one down.
+- Deal flies each card from the shoe face down. A card appears in a hand only after its flight finishes. Then the player cards and the dealer's up card flip together. The hole card stays down until reveal. Hit/Stand/Next wait until the motion finishes.
 
 ## Assets
 
@@ -158,7 +159,6 @@ Keep the matching `.import` files in git. Compiled `.ctex` files live under `.go
 
 ## What is not done yet
 
-- Deal and flip animations.
 - Adaptive layout for portrait/landscape (buttons use absolute offsets).
 - Duel mode.
 - Audio, localization, saves.
@@ -199,7 +199,7 @@ main_level.tscn
 - Keep Blackjack rules out of menu scenes. Session flow is `blackjack_flow.gd`; totals and dealer hit-below-17 are `blackjack_rules.gd`.
 - Do not add a second `deck_manager.gd` in the project root.
 - Dealer AI may use only the dealer hand and the hit-below-17 rule.
-- Next sensible step: deal/flip animations and adaptive layout, then Duel as a separate mode.
+- Next sensible step: adaptive layout, then Duel as a separate mode.
 
 ## Git
 
