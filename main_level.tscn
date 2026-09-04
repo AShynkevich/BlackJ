@@ -32,7 +32,7 @@ corner_radius_top_right = 12
 corner_radius_bottom_right = 12
 corner_radius_bottom_left = 12
 
-[node name="MainLevel" type="Control" unique_id=1007985574]
+[node name="MainLevel" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -41,7 +41,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6614m")
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=693884431]
+[node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -52,61 +52,206 @@ mouse_filter = 2
 texture = ExtResource("2_bhu08")
 expand_mode = 1
 
-[node name="CreditLabel" type="Label" parent="." unique_id=1614531775]
-visible = false
+[node name="SafeArea" type="MarginContainer" parent="."]
+unique_name_in_owner = true
 layout_mode = 1
-offset_left = 24.0
-offset_top = 20.0
-offset_right = 320.0
-offset_bottom = 64.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 20
+
+[node name="Fill" type="Control" parent="SafeArea"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="TableLayout" type="VBoxContainer" parent="SafeArea/Fill"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 8
+
+[node name="TopBar" type="HBoxContainer" parent="SafeArea/Fill/TableLayout"]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Bank" type="VBoxContainer" parent="SafeArea/Fill/TableLayout/TopBar"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="CreditLabel" type="Label" parent="SafeArea/Fill/TableLayout/TopBar/Bank"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
 theme_override_font_sizes/font_size = 28
 text = "Credit: $0"
 
-[node name="BetLabel" type="Label" parent="." unique_id=1122729695]
+[node name="BetLabel" type="Label" parent="SafeArea/Fill/TableLayout/TopBar/Bank"]
+unique_name_in_owner = true
 visible = false
-layout_mode = 1
-offset_left = 24.0
-offset_top = 58.0
-offset_right = 320.0
-offset_bottom = 98.0
+layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
 theme_override_font_sizes/font_size = 24
 text = "Bet: $0"
 
-[node name="StartButton" type="Button" parent="." unique_id=1010501081]
-layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -184.0
-offset_top = 16.0
-offset_right = -24.0
-offset_bottom = 64.0
-grow_horizontal = 0
+[node name="StartButton" type="Button" parent="SafeArea/Fill/TableLayout/TopBar"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 48)
+layout_mode = 2
 theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_6614m")
 text = "TO MENU"
 
-[node name="DeckPile" type="Control" parent="." unique_id=335570229]
+[node name="DealerColumn" type="VBoxContainer" parent="SafeArea/Fill/TableLayout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="DealerScoreLabel" type="Label" parent="SafeArea/Fill/TableLayout/DealerColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+
+[node name="DealerHand" type="HBoxContainer" parent="SafeArea/Fill/TableLayout/DealerColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="ResultLabel" type="Label" parent="SafeArea/Fill/TableLayout"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
+theme_override_font_sizes/font_size = 28
+horizontal_alignment = 1
+autowrap_mode = 3
+
+[node name="PlayerColumn" type="VBoxContainer" parent="SafeArea/Fill/TableLayout"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 4
+alignment = 1
+
+[node name="PlayerHand" type="HBoxContainer" parent="SafeArea/Fill/TableLayout/PlayerColumn"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 180)
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="PlayerScoreLabel" type="Label" parent="SafeArea/Fill/TableLayout/PlayerColumn"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
+
+[node name="ActionBar" type="HBoxContainer" parent="SafeArea/Fill/TableLayout"]
+custom_minimum_size = Vector2(0, 64)
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="BetPanel" type="HBoxContainer" parent="SafeArea/Fill/TableLayout/ActionBar"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="DealButton" type="Button" parent="SafeArea/Fill/TableLayout/ActionBar/BetPanel"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 64)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.875, 0.875, 0.875, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_bet")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bet")
+theme_override_styles/hover = SubResource("StyleBoxFlat_bet")
+disabled = true
+text = "DEAL"
+
+[node name="DecisionPanel" type="HBoxContainer" parent="SafeArea/Fill/TableLayout/ActionBar"]
+unique_name_in_owner = true
 visible = false
-custom_minimum_size = Vector2(144, 247)
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 1
+
+[node name="HitButton" type="Button" parent="SafeArea/Fill/TableLayout/ActionBar/DecisionPanel"]
+custom_minimum_size = Vector2(140, 64)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_bet")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bet")
+theme_override_styles/hover = SubResource("StyleBoxFlat_bet")
+text = "HIT"
+
+[node name="StandButton" type="Button" parent="SafeArea/Fill/TableLayout/ActionBar/DecisionPanel"]
+custom_minimum_size = Vector2(140, 64)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_bet")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bet")
+theme_override_styles/hover = SubResource("StyleBoxFlat_bet")
+text = "STAND"
+
+[node name="ResultPanel" type="HBoxContainer" parent="SafeArea/Fill/TableLayout/ActionBar"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+alignment = 1
+
+[node name="NextButton" type="Button" parent="SafeArea/Fill/TableLayout/ActionBar/ResultPanel"]
+custom_minimum_size = Vector2(160, 64)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_bet")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bet")
+theme_override_styles/hover = SubResource("StyleBoxFlat_bet")
+text = "NEXT"
+
+[node name="DeckPile" type="Control" parent="SafeArea/Fill"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(120, 180)
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -192.0
-offset_top = -123.0
-offset_right = -48.0
-offset_bottom = 124.0
+offset_left = -132.0
+offset_top = -90.0
+offset_right = -12.0
+offset_bottom = 90.0
 grow_horizontal = 0
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Stack2" type="TextureRect" parent="DeckPile" unique_id=1343382367]
+[node name="Stack2" type="TextureRect" parent="SafeArea/Fill/DeckPile"]
 modulate = Color(0.7, 0.7, 0.7, 1)
 layout_mode = 0
 offset_left = 4.0
@@ -118,7 +263,7 @@ texture = ExtResource("4_back")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Stack1" type="TextureRect" parent="DeckPile" unique_id=1889044766]
+[node name="Stack1" type="TextureRect" parent="SafeArea/Fill/DeckPile"]
 modulate = Color(0.85, 0.85, 0.85, 1)
 layout_mode = 0
 offset_left = 2.0
@@ -130,7 +275,7 @@ texture = ExtResource("4_back")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="TopCard" type="TextureRect" parent="DeckPile" unique_id=2099469059]
+[node name="TopCard" type="TextureRect" parent="SafeArea/Fill/DeckPile"]
 layout_mode = 0
 offset_right = 120.0
 offset_bottom = 180.0
@@ -139,183 +284,14 @@ texture = ExtResource("4_back")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="DealerHand" type="HBoxContainer" parent="." unique_id=1691636903]
-propagate_maximum_size = false
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -140.0
-offset_top = 80.0
-offset_right = 140.0
-offset_bottom = 260.0
-grow_horizontal = 2
-mouse_filter = 2
-theme_override_constants/separation = 16
-alignment = 1
-
-[node name="PlayerHand" type="HBoxContainer" parent="." unique_id=749334961]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -140.0
-offset_top = -300.0
-offset_right = 140.0
-offset_bottom = -120.0
-grow_horizontal = 2
-grow_vertical = 0
-mouse_filter = 2
-theme_override_constants/separation = 16
-alignment = 1
-
-[node name="DealerScoreLabel" type="Label" parent="." unique_id=1038822989]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -140.0
-offset_top = 48.0
-offset_right = 140.0
-offset_bottom = 80.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
-theme_override_font_sizes/font_size = 22
-horizontal_alignment = 1
-
-[node name="PlayerScoreLabel" type="Label" parent="." unique_id=778733496]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -140.0
-offset_top = -116.0
-offset_right = 140.0
-offset_bottom = -88.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
-theme_override_font_sizes/font_size = 22
-horizontal_alignment = 1
-
-[node name="ResultLabel" type="Label" parent="." unique_id=1490687020]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -280.0
-offset_top = -24.0
-offset_right = 280.0
-offset_bottom = 24.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
-theme_override_font_sizes/font_size = 28
-horizontal_alignment = 1
-
-[node name="BetPanel" type="HBoxContainer" parent="." unique_id=347929041]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -280.0
-offset_top = -80.0
-offset_right = 280.0
-offset_bottom = -8.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 16
-alignment = 1
-
-[node name="DealButton" type="Button" parent="BetPanel" unique_id=1648599101]
-custom_minimum_size = Vector2(140, 64)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.875, 0.875, 0.875, 1)
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("StyleBoxFlat_bet")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_bet")
-theme_override_styles/hover = SubResource("StyleBoxFlat_bet")
-disabled = true
-text = "DEAL"
-
-[node name="DecisionPanel" type="HBoxContainer" parent="." unique_id=1896954236]
-visible = false
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -180.0
-offset_top = -80.0
-offset_right = 180.0
-offset_bottom = -8.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_constants/separation = 16
-alignment = 1
-
-[node name="HitButton" type="Button" parent="DecisionPanel" unique_id=1751097911]
-custom_minimum_size = Vector2(140, 64)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("StyleBoxFlat_bet")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_bet")
-theme_override_styles/hover = SubResource("StyleBoxFlat_bet")
-text = "HIT"
-
-[node name="StandButton" type="Button" parent="DecisionPanel" unique_id=1406606268]
-custom_minimum_size = Vector2(140, 64)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("StyleBoxFlat_bet")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_bet")
-theme_override_styles/hover = SubResource("StyleBoxFlat_bet")
-text = "STAND"
-
-[node name="ResultPanel" type="HBoxContainer" parent="." unique_id=1072860122]
-visible = false
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -100.0
-offset_top = -80.0
-offset_right = 100.0
-offset_bottom = -8.0
-grow_horizontal = 2
-grow_vertical = 0
-alignment = 1
-
-[node name="NextButton" type="Button" parent="ResultPanel" unique_id=680567319]
-custom_minimum_size = Vector2(160, 64)
-layout_mode = 2
-theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
-theme_override_font_sizes/font_size = 28
-theme_override_styles/normal = SubResource("StyleBoxFlat_bet")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_bet")
-theme_override_styles/hover = SubResource("StyleBoxFlat_bet")
-text = "NEXT"
-
-[node name="DeckManager" type="Node" parent="." unique_id=947934991]
+[node name="DeckManager" type="Node" parent="."]
 script = ExtResource("3_bhu08")
 
 [node name="BlackjackFlow" type="Node" parent="."]
 script = ExtResource("5_flow")
 
-[node name="CreditDialog" type="ColorRect" parent="." unique_id=1191525856]
+[node name="CreditDialog" type="ColorRect" parent="."]
+unique_name_in_owner = true
 visible = false
 layout_mode = 1
 anchors_preset = 15
@@ -325,30 +301,34 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 0.4862745)
 
-[node name="Panel" type="Panel" parent="CreditDialog" unique_id=1473808988]
+[node name="Center" type="CenterContainer" parent="CreditDialog"]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -260.0
-offset_top = -140.0
-offset_right = 260.0
-offset_bottom = 140.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="CreditDialog/Center"]
+custom_minimum_size = Vector2(280, 220)
+layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
 
-[node name="Message" type="Label" parent="CreditDialog/Panel" unique_id=1349757703]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_left = 28.0
-offset_top = 36.0
-offset_right = -28.0
-offset_bottom = 160.0
-grow_horizontal = 2
+[node name="Margin" type="MarginContainer" parent="CreditDialog/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Box" type="VBoxContainer" parent="CreditDialog/Center/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Message" type="Label" parent="CreditDialog/Center/Panel/Margin/Box"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
 theme_override_font_sizes/font_size = 26
 text = "You have been awarded $100 starting credit."
@@ -356,19 +336,10 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 3
 
-[node name="OkButton" type="Button" parent="CreditDialog/Panel" unique_id=1532584779]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -80.0
-offset_top = -88.0
-offset_right = 80.0
-offset_bottom = -28.0
-grow_horizontal = 2
-grow_vertical = 0
+[node name="OkButton" type="Button" parent="CreditDialog/Center/Panel/Margin/Box"]
+custom_minimum_size = Vector2(160, 56)
+layout_mode = 2
+size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxFlat_6614m")
@@ -376,9 +347,9 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_6614m")
 theme_override_styles/hover = SubResource("StyleBoxFlat_6614m")
 text = "OK"
 
-[connection signal="pressed" from="StartButton" to="." method="_on_main_menu_pressed"]
-[connection signal="pressed" from="BetPanel/DealButton" to="." method="_on_deal_pressed"]
-[connection signal="pressed" from="DecisionPanel/HitButton" to="." method="_on_hit_pressed"]
-[connection signal="pressed" from="DecisionPanel/StandButton" to="." method="_on_stand_pressed"]
-[connection signal="pressed" from="ResultPanel/NextButton" to="." method="_on_next_pressed"]
-[connection signal="pressed" from="CreditDialog/Panel/OkButton" to="." method="_on_credit_ok_pressed"]
+[connection signal="pressed" from="SafeArea/Fill/TableLayout/TopBar/StartButton" to="." method="_on_main_menu_pressed"]
+[connection signal="pressed" from="SafeArea/Fill/TableLayout/ActionBar/BetPanel/DealButton" to="." method="_on_deal_pressed"]
+[connection signal="pressed" from="SafeArea/Fill/TableLayout/ActionBar/DecisionPanel/HitButton" to="." method="_on_hit_pressed"]
+[connection signal="pressed" from="SafeArea/Fill/TableLayout/ActionBar/DecisionPanel/StandButton" to="." method="_on_stand_pressed"]
+[connection signal="pressed" from="SafeArea/Fill/TableLayout/ActionBar/ResultPanel/NextButton" to="." method="_on_next_pressed"]
+[connection signal="pressed" from="CreditDialog/Center/Panel/Margin/Box/OkButton" to="." method="_on_credit_ok_pressed"]
