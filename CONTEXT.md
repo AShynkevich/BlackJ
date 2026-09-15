@@ -155,14 +155,19 @@ Soft Ace (11 ↔ 1) is applied in `BlackjackRules.hand_total`, not on the resour
 | `assets/cards/cards-back.png` | Card-back spritesheet (several designs) |
 | `assets/cards/card_back.tres` | AtlasTexture for one cropped card back |
 | `icon.svg` | Project icon (Godot default) |
+| `assets/audio/menu_music.mp3`, `assets/audio/game_music.mp3` | Menu and table background loops (`%Music`, `looping` on) |
+| `assets/audio/click3.wav`, `assets/audio/click.wav` | UI click (menu, table) |
+| `assets/audio/bet.ogg`, `assets/audio/deal.ogg`, `assets/audio/flip.ogg` | Bet chosen, card deal flight, card flip |
+| `assets/audio/win.wav`, `assets/audio/lose.wav`, `assets/audio/push.wav` | Round result stingers |
 
 Keep the matching `.import` files in git. Compiled `.ctex` files live under `.godot/` and stay out of the repo.
 
 ## What is not done yet
 
 - Duel mode.
-- Audio, localization, saves.
-- Export presets for Android / iOS / desktop.
+- Audio: menu music, table SFX, and result stingers play; table background music is wired (stream assigned, loop on) but its `music.play()` call is left commented in `main_level.gd` for now.
+- Localization, saves.
+- Export presets: `export_presets.cfg` has macOS and Android presets defined; signing identities and templates are not filled in.
 
 ## Scene map
 

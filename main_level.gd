@@ -29,6 +29,14 @@ var _flight_layer: Control
 @onready var dealer_hand_box: HBoxContainer = $%DealerHand
 @onready var player_hand_box: HBoxContainer = $%PlayerHand
 @onready var deck_manager: Node = $DeckManager
+@onready var music: AudioStreamPlayer = $%Music
+@onready var sfx_click: AudioStreamPlayer = $%SfxClick
+@onready var sfx_bet: AudioStreamPlayer = $%SfxBet
+@onready var sfx_deal: AudioStreamPlayer = $%SfxDeal
+@onready var sfx_flip: AudioStreamPlayer = $%SfxFlip
+@onready var sfx_win: AudioStreamPlayer = $%SfxWin
+@onready var sfx_lose: AudioStreamPlayer = $%SfxLose
+@onready var sfx_push: AudioStreamPlayer = $%SfxPush
 
 
 func _ready() -> void:
@@ -53,6 +61,8 @@ func _ready() -> void:
 	session_message.text = CREDIT_MESSAGE
 	credit_dialog.visible = true
 	_on_phase_changed(flow.Phase.CREDIT)
+	# Assign assets/audio/music_table.ogg on %Music (enable Loop on the import).
+	# music.play()
 
 
 func _build_bet_buttons() -> void:
@@ -83,6 +93,7 @@ func _on_credit_ok_pressed() -> void:
 	if flow.phase != flow.Phase.CREDIT:
 		_on_main_menu_pressed()
 		return
+	sfx_click.play()
 	credit_label.visible = true
 	bet_label.visible = true
 	deck_pile.visible = true
@@ -92,6 +103,7 @@ func _on_credit_ok_pressed() -> void:
 
 
 func _on_bet_chosen(amount: int) -> void:
+	sfx_bet.play()
 	flow.choose_bet(amount)
 	_refresh_bet_buttons()
 
@@ -99,24 +111,28 @@ func _on_bet_chosen(amount: int) -> void:
 func _on_deal_pressed() -> void:
 	if _playing_anims:
 		return
+	sfx_click.play()
 	flow.deal()
 
 
 func _on_hit_pressed() -> void:
 	if _playing_anims:
 		return
+	sfx_click.play()
 	flow.hit()
 
 
 func _on_stand_pressed() -> void:
 	if _playing_anims:
 		return
+	sfx_click.play()
 	flow.stand()
 
 
 func _on_next_pressed() -> void:
 	if _playing_anims:
 		return
+	sfx_click.play()
 	flow.next_round()
 	_refresh_bet_buttons()
 
@@ -207,6 +223,8 @@ func _fly_card_into_hand(card: CardUI, hand_box: HBoxContainer) -> void:
 	await get_tree().process_frame
 	if not is_instance_valid(card) or not is_instance_valid(slot):
 		return
+	
+	sfx_deal.play()
 	await card.animate_deal_from(deck_pile.global_position, slot.global_position)
 	if not is_instance_valid(card) or not is_instance_valid(slot):
 		return
@@ -228,6 +246,7 @@ func _reveal_pending_faces() -> void:
 				pending.append(card)
 	if pending.is_empty():
 		return
+	sfx_flip.play()
 	for i in pending.size():
 		if i == pending.size() - 1:
 			await pending[i].animate_flip_up()
@@ -236,6 +255,7 @@ func _reveal_pending_faces() -> void:
 
 
 func _flip_hole_cards() -> void:
+	# sfx_flip.play()
 	for child in dealer_hand_box.get_children():
 		var card := child as CardUI
 		if card == null or card.is_face_up:
@@ -262,6 +282,13 @@ func _apply_pending_result() -> void:
 		return
 	result_label.text = _pending_result
 	_pending_result = ""
+	if "Push" in result_label.text:
+		sfx_push.play()
+	elif "win" in result_label.text.to_lower() or "Blackjack" in result_label.text:
+		sfx_win.play()
+	else:
+		sfx_lose.play()
+	
 	if flow.credit > 0:
 		return
 	session_message.text = LOSE_MESSAGE
@@ -291,4 +318,5 @@ func _refresh_bet_buttons() -> void:
 
 
 func _on_main_menu_pressed() -> void:
+	sfx_click.play()
 	get_tree().change_scene_to_file("res://menu.tscn")
