@@ -2,6 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://c3schkv2adahj" path="res://assets/bj_logo.png" id="1_lti8b"]
 [ext_resource type="Script" uid="uid://dioww2proiaw2" path="res://menu.gd" id="1_ouk20"]
+[ext_resource type="AudioStream" uid="uid://bta0bbauxk7lf" path="res://assets/audio/menu_music.mp3" id="3_4hy44"]
+[ext_resource type="AudioStream" uid="uid://csespuve1w737" path="res://assets/audio/click3.wav" id="3_mae5d"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ncy80"]
 bg_color = Color(0.53949934, 0.4693563, 0.19943395, 1)
@@ -10,7 +12,7 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
-[node name="Control" type="Control"]
+[node name="Control" type="Control" unique_id=1553208593]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -19,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_ouk20")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1168696522]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -28,7 +30,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.07450981, 0.07450981, 0.07450981, 1)
 
-[node name="SafeArea" type="MarginContainer" parent="."]
+[node name="SafeArea" type="MarginContainer" parent="." unique_id=1833818538]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -40,23 +42,23 @@ theme_override_constants/margin_top = 24
 theme_override_constants/margin_right = 24
 theme_override_constants/margin_bottom = 24
 
-[node name="Center" type="CenterContainer" parent="SafeArea"]
+[node name="Center" type="CenterContainer" parent="SafeArea" unique_id=2107782086]
 layout_mode = 2
 
-[node name="MenuColumn" type="VBoxContainer" parent="SafeArea/Center"]
+[node name="MenuColumn" type="VBoxContainer" parent="SafeArea/Center" unique_id=1137425767]
 custom_minimum_size = Vector2(460, 0)
 layout_mode = 2
 theme_override_constants/separation = 20
 alignment = 1
 
-[node name="Logo" type="TextureRect" parent="SafeArea/Center/MenuColumn"]
+[node name="Logo" type="TextureRect" parent="SafeArea/Center/MenuColumn" unique_id=1738522819]
 custom_minimum_size = Vector2(460, 400)
 layout_mode = 2
 texture = ExtResource("1_lti8b")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="StartButton" type="Button" parent="SafeArea/Center/MenuColumn"]
+[node name="StartButton" type="Button" parent="SafeArea/Center/MenuColumn" unique_id=668301387]
 custom_minimum_size = Vector2(200, 72)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
@@ -66,7 +68,7 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_ncy80")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ncy80")
 text = "START"
 
-[node name="ExitButton" type="Button" parent="SafeArea/Center/MenuColumn"]
+[node name="ExitButton" type="Button" parent="SafeArea/Center/MenuColumn" unique_id=1596274198]
 custom_minimum_size = Vector2(200, 72)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
@@ -76,5 +78,16 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_ncy80")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ncy80")
 text = "EXIT"
 
-[connection signal="pressed" from="SafeArea/Center/MenuColumn/ExitButton" to="." method="_on_exit_pressed"]
+[node name="Audio" type="Node" parent="." unique_id=2105148466]
+
+[node name="Music" type="AudioStreamPlayer" parent="Audio" unique_id=1971161163]
+unique_name_in_owner = true
+stream = ExtResource("3_4hy44")
+parameters/looping = true
+
+[node name="SfxClick" type="AudioStreamPlayer" parent="Audio" unique_id=1292317205]
+unique_name_in_owner = true
+stream = ExtResource("3_mae5d")
+
 [connection signal="pressed" from="SafeArea/Center/MenuColumn/StartButton" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="SafeArea/Center/MenuColumn/ExitButton" to="." method="_on_exit_pressed"]
