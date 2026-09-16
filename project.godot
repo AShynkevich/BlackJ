@@ -16,12 +16,21 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 run/max_fps=60
 config/icon="res://icon.svg"
 
+[autoload]
+
+AudioSettings="*res://scripts/audio_settings.gd"
+
 [display]
 
 window/size/viewport_width=1280
 window/size/viewport_height=720
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+
+[internationalization]
+
+locale/translations=PackedStringArray("res://localization/ui.en.translation", "res://localization/ui.ru.translation")
+locale/fallback="en"
 
 [physics]
 

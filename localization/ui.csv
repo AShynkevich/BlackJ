@@ -1,0 +1,29 @@
+keys,en,ru
+START,START,СТАРТ
+SETTINGS,SETTINGS,НАСТРОЙКИ
+EXIT,EXIT,ВЫХОД
+TO MENU,TO MENU,В МЕНЮ
+DEAL,DEAL,РАЗДАТЬ
+HIT,HIT,ЕЩЁ
+STAND,STAND,ХВАТИТ
+NEXT,NEXT,ДАЛЕЕ
+OK,OK,OK
+CLOSE,CLOSE,ЗАКРЫТЬ
+Music,Music,Музыка
+Sound Effects,Sound Effects,Звуки
+Language,Language,Язык
+CREDIT_MESSAGE,You have been awarded $100 starting credit.,Вам начислено $100 стартового капитала.
+LOSE_MESSAGE,You are out of credit. Press OK to return to the main menu.,"Ваш капитал закончился. Нажмите OK, чтобы вернуться в меню."
+CREDIT_LABEL,Credit: $%d,Баланс: $%d
+BET_LABEL,Bet: $%d,Ставка: $%d
+PLAYER_SCORE,You: %d,Вы: %d
+DEALER_SCORE,Dealer: %d,Дилер: %d
+DEALER_SCORE_HIDDEN,Dealer: ?,Дилер: ?
+RESULT_PUSH_BLACKJACK,Push. Both have Blackjack.,Ничья. Блэкджек у обоих.
+RESULT_BLACKJACK_WIN,Blackjack. You win $%d.,Блэкджек! Вы выиграли $%d.
+RESULT_DEALER_BLACKJACK,Dealer has Blackjack.,У дилера блэкджек.
+RESULT_BUST,Bust. You lose.,Перебор. Вы проиграли.
+RESULT_DEALER_BUST,Dealer busts. You win $%d.,Перебор у дилера. Вы выиграли $%d.
+RESULT_PLAYER_WINS,You win $%d.,Вы выиграли $%d.
+RESULT_DEALER_WINS,Dealer wins.,Дилер выиграл.
+RESULT_PUSH,Push.,Ничья.

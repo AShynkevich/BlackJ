@@ -1,8 +1,20 @@
 extends Control
 
 const CARD_SCENE := preload("res://card_ui.tscn")
-const CREDIT_MESSAGE := "You have been awarded $100 starting credit."
-const LOSE_MESSAGE := "You are out of credit. Press OK to return to the main menu."
+
+## Outcome -> localization key for the result label.
+const RESULT_KEYS := {
+	BlackjackFlow.Outcome.PLAYER_BLACKJACK: "RESULT_BLACKJACK_WIN",
+	BlackjackFlow.Outcome.DEALER_BLACKJACK: "RESULT_DEALER_BLACKJACK",
+	BlackjackFlow.Outcome.PUSH_BLACKJACK: "RESULT_PUSH_BLACKJACK",
+	BlackjackFlow.Outcome.BUST: "RESULT_BUST",
+	BlackjackFlow.Outcome.DEALER_BUST: "RESULT_DEALER_BUST",
+	BlackjackFlow.Outcome.PLAYER_WINS: "RESULT_PLAYER_WINS",
+	BlackjackFlow.Outcome.DEALER_WINS: "RESULT_DEALER_WINS",
+	BlackjackFlow.Outcome.PUSH: "RESULT_PUSH",
+}
+const WIN_OUTCOMES := [BlackjackFlow.Outcome.PLAYER_BLACKJACK, BlackjackFlow.Outcome.DEALER_BUST, BlackjackFlow.Outcome.PLAYER_WINS]
+const PUSH_OUTCOMES := [BlackjackFlow.Outcome.PUSH_BLACKJACK, BlackjackFlow.Outcome.PUSH]
 
 @export var bet_amounts: Array[int] = [10, 25, 50]
 @export var bet_button_size := Vector2(100, 64)
@@ -10,7 +22,9 @@ const LOSE_MESSAGE := "You are out of credit. Press OK to return to the main men
 var bet_buttons: Array[Button] = []
 var _playing_anims: bool = false
 var _anim_queue: Array[Dictionary] = []
-var _pending_result: String = ""
+var _has_pending_result: bool = false
+var _pending_outcome: BlackjackFlow.Outcome
+var _pending_amount: int = 0
 var _flight_layer: Control
 
 @onready var flow: Node = $BlackjackFlow
@@ -37,6 +51,8 @@ var _flight_layer: Control
 @onready var sfx_win: AudioStreamPlayer = $%SfxWin
 @onready var sfx_lose: AudioStreamPlayer = $%SfxLose
 @onready var sfx_push: AudioStreamPlayer = $%SfxPush
+@onready var music_group: SoundGroup = $%MusicGroup
+@onready var sfx_group: SoundGroup = $%SfxGroup
 
 
 func _ready() -> void:
@@ -58,11 +74,13 @@ func _ready() -> void:
 	credit_label.visible = false
 	bet_label.visible = false
 	deck_pile.visible = false
-	session_message.text = CREDIT_MESSAGE
+	session_message.text = tr("CREDIT_MESSAGE")
 	credit_dialog.visible = true
 	_on_phase_changed(flow.Phase.CREDIT)
-	# Assign assets/audio/music_table.ogg on %Music (enable Loop on the import).
-	# music.play()
+	music.volume_db = -25.0
+	music.play()
+	music_group.set_enabled(AudioSettings.music_enabled)
+	sfx_group.set_enabled(AudioSettings.sound_enabled)
 
 
 func _build_bet_buttons() -> void:
@@ -145,11 +163,11 @@ func _on_phase_changed(_phase: int) -> void:
 
 
 func _on_credit_changed(credit: int) -> void:
-	credit_label.text = "Credit: $%d" % credit
+	credit_label.text = tr("CREDIT_LABEL") % credit
 
 
 func _on_bet_changed(shown_bet: int) -> void:
-	bet_label.text = "Bet: $%d" % shown_bet
+	bet_label.text = tr("BET_LABEL") % shown_bet
 
 
 func _on_card_dealt(is_player: bool, card_data: CardData, face_up: bool) -> void:
@@ -171,7 +189,7 @@ func _on_dealer_revealed() -> void:
 
 func _on_hands_cleared() -> void:
 	_anim_queue.clear()
-	_pending_result = ""
+	_has_pending_result = false
 	for child in player_hand_box.get_children():
 		child.queue_free()
 	for child in dealer_hand_box.get_children():
@@ -182,8 +200,10 @@ func _on_hands_cleared() -> void:
 	_refresh_scores()
 
 
-func _on_round_resolved(message: String) -> void:
-	_pending_result = message
+func _on_round_resolved(outcome: BlackjackFlow.Outcome, amount: int) -> void:
+	_has_pending_result = true
+	_pending_outcome = outcome
+	_pending_amount = amount
 	if not _playing_anims:
 		_apply_pending_result()
 
@@ -278,20 +298,21 @@ func _apply_phase_panels() -> void:
 
 
 func _apply_pending_result() -> void:
-	if _pending_result.is_empty():
+	if not _has_pending_result:
 		return
-	result_label.text = _pending_result
-	_pending_result = ""
-	if "Push" in result_label.text:
-		sfx_push.play()
-	elif "win" in result_label.text.to_lower() or "Blackjack" in result_label.text:
+	_has_pending_result = false
+	var template := tr(RESULT_KEYS[_pending_outcome])
+	result_label.text = template % _pending_amount if "%d" in template else template
+	if _pending_outcome in WIN_OUTCOMES:
 		sfx_win.play()
+	elif _pending_outcome in PUSH_OUTCOMES:
+		sfx_push.play()
 	else:
 		sfx_lose.play()
 	
 	if flow.credit > 0:
 		return
-	session_message.text = LOSE_MESSAGE
+	session_message.text = tr("LOSE_MESSAGE")
 	credit_dialog.visible = true
 
 
@@ -300,11 +321,11 @@ func _refresh_scores() -> void:
 		player_score_label.text = ""
 		dealer_score_label.text = ""
 		return
-	player_score_label.text = "You: %d" % flow.player_total()
+	player_score_label.text = tr("PLAYER_SCORE") % flow.player_total()
 	if flow.dealer_cards_revealed:
-		dealer_score_label.text = "Dealer: %d" % flow.dealer_total()
+		dealer_score_label.text = tr("DEALER_SCORE") % flow.dealer_total()
 	else:
-		dealer_score_label.text = "Dealer: ?"
+		dealer_score_label.text = tr("DEALER_SCORE_HIDDEN")
 
 
 func _refresh_bet_buttons() -> void:
@@ -314,7 +335,7 @@ func _refresh_bet_buttons() -> void:
 		button.disabled = amount > flow.credit
 		button.modulate = Color(1.15, 1.1, 0.85, 1) if amount == flow.selected_bet else Color.WHITE
 	deal_button.disabled = flow.selected_bet <= 0 or flow.selected_bet > flow.credit
-	bet_label.text = "Bet: $%d" % flow.shown_bet()
+	bet_label.text = tr("BET_LABEL") % flow.shown_bet()
 
 
 func _on_main_menu_pressed() -> void:

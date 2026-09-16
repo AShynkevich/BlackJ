@@ -3,7 +3,10 @@ extends Node
 ## Classic session: credit, bet, deal, player turn, dealer, payout.
 ## Does not spawn CardUI or read the table scene.
 
+class_name BlackjackFlow
+
 enum Phase { CREDIT, BETTING, PLAYER_TURN, DEALER_TURN, RESOLVE }
+enum Outcome { PLAYER_BLACKJACK, DEALER_BLACKJACK, PUSH_BLACKJACK, BUST, DEALER_BUST, PLAYER_WINS, DEALER_WINS, PUSH }
 
 const STARTING_CREDIT := 100
 
@@ -13,7 +16,7 @@ signal bet_changed(shown_bet: int)
 signal card_dealt(is_player: bool, card: CardData, face_up: bool)
 signal dealer_revealed
 signal hands_cleared
-signal round_resolved(message: String)
+signal round_resolved(outcome: Outcome, amount: int)
 
 @export var opening_cards_each: int = 2
 @export var hide_dealer_last_card: bool = true
@@ -66,7 +69,7 @@ func hit() -> void:
 	_deal_to(player_hand, true, true)
 	if BlackjackRules.is_bust(player_hand):
 		_reveal_dealer()
-		_finish_round(0, "Bust. You lose.")
+		_finish_round(0, Outcome.BUST, 0)
 
 
 func stand() -> void:
@@ -142,11 +145,11 @@ func _after_opening_deal() -> void:
 	if player_natural or dealer_natural:
 		_reveal_dealer()
 		if player_natural and dealer_natural:
-			_finish_round(locked_bet, "Push. Both have Blackjack.")
+			_finish_round(locked_bet, Outcome.PUSH_BLACKJACK, 0)
 		elif player_natural:
-			_finish_round(locked_bet * 2, "Blackjack. You win $%d." % locked_bet)
+			_finish_round(locked_bet * 2, Outcome.PLAYER_BLACKJACK, locked_bet)
 		else:
-			_finish_round(0, "Dealer has Blackjack.")
+			_finish_round(0, Outcome.DEALER_BLACKJACK, 0)
 		return
 	_set_phase(Phase.PLAYER_TURN)
 
@@ -170,19 +173,19 @@ func _resolve_hands() -> void:
 	var player := player_total()
 	var dealer := dealer_total()
 	if BlackjackRules.is_bust(dealer_hand):
-		_finish_round(locked_bet * 2, "Dealer busts. You win $%d." % locked_bet)
+		_finish_round(locked_bet * 2, Outcome.DEALER_BUST, locked_bet)
 	elif player > dealer:
-		_finish_round(locked_bet * 2, "You win $%d." % locked_bet)
+		_finish_round(locked_bet * 2, Outcome.PLAYER_WINS, locked_bet)
 	elif dealer > player:
-		_finish_round(0, "Dealer wins.")
+		_finish_round(0, Outcome.DEALER_WINS, 0)
 	else:
-		_finish_round(locked_bet, "Push.")
+		_finish_round(locked_bet, Outcome.PUSH, 0)
 
 
-func _finish_round(payout: int, message: String) -> void:
+func _finish_round(payout: int, outcome: Outcome, amount: int) -> void:
 	credit += payout
 	credit_changed.emit(credit)
-	round_resolved.emit(message)
+	round_resolved.emit(outcome, amount)
 	_set_phase(Phase.RESOLVE)
 
 
