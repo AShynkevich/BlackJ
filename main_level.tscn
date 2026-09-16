@@ -410,9 +410,89 @@ theme_override_styles/pressed = SubResource("StyleBoxFlat_bet")
 theme_override_styles/hover = SubResource("StyleBoxFlat_bet")
 text = "OK"
 
+[node name="ConfirmLeaveDialog" type="ColorRect" parent="." unique_id=340815800]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.4862745)
+
+[node name="Center" type="CenterContainer" parent="ConfirmLeaveDialog" unique_id=340815801]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="ConfirmLeaveDialog/Center" unique_id=340815802]
+custom_minimum_size = Vector2(320, 220)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
+
+[node name="Margin" type="MarginContainer" parent="ConfirmLeaveDialog/Center/Panel" unique_id=340815803]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Box" type="VBoxContainer" parent="ConfirmLeaveDialog/Center/Panel/Margin" unique_id=340815804]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="ConfirmLeaveDialog/Center/Panel/Margin/Box" unique_id=340815805]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
+theme_override_font_sizes/font_size = 28
+text = "LEAVE_TABLE_TITLE"
+horizontal_alignment = 1
+
+[node name="ConfirmMessage" type="Label" parent="ConfirmLeaveDialog/Center/Panel/Margin/Box" unique_id=340815806]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
+theme_override_font_sizes/font_size = 22
+text = "You will lose all your progress if you go to the main menu."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="Buttons" type="HBoxContainer" parent="ConfirmLeaveDialog/Center/Panel/Margin/Box" unique_id=340815807]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 16
+
+[node name="CancelButton" type="Button" parent="ConfirmLeaveDialog/Center/Panel/Margin/Box/Buttons" unique_id=340815808]
+custom_minimum_size = Vector2(140, 56)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxFlat_bet")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bet")
+theme_override_styles/hover = SubResource("StyleBoxFlat_bet")
+text = "CANCEL"
+
+[node name="YesButton" type="Button" parent="ConfirmLeaveDialog/Center/Panel/Margin/Box/Buttons" unique_id=340815809]
+custom_minimum_size = Vector2(140, 56)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
+theme_override_font_sizes/font_size = 26
+theme_override_styles/normal = SubResource("StyleBoxFlat_bet")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_bet")
+theme_override_styles/hover = SubResource("StyleBoxFlat_bet")
+text = "YES"
+
 [connection signal="pressed" from="SafeArea/Fill/TableLayout/TopBar/StartButton" to="." method="_on_main_menu_pressed"]
 [connection signal="pressed" from="SafeArea/Fill/TableLayout/ActionBar/BetPanel/DealButton" to="." method="_on_deal_pressed"]
 [connection signal="pressed" from="SafeArea/Fill/TableLayout/ActionBar/DecisionPanel/HitButton" to="." method="_on_hit_pressed"]
 [connection signal="pressed" from="SafeArea/Fill/TableLayout/ActionBar/DecisionPanel/StandButton" to="." method="_on_stand_pressed"]
 [connection signal="pressed" from="SafeArea/Fill/TableLayout/ActionBar/ResultPanel/NextButton" to="." method="_on_next_pressed"]
 [connection signal="pressed" from="CreditDialog/Center/Panel/Margin/Box/OkButton" to="." method="_on_credit_ok_pressed"]
+[connection signal="pressed" from="ConfirmLeaveDialog/Center/Panel/Margin/Box/Buttons/CancelButton" to="." method="_on_confirm_leave_cancel_pressed"]
+[connection signal="pressed" from="ConfirmLeaveDialog/Center/Panel/Margin/Box/Buttons/YesButton" to="." method="_on_confirm_leave_yes_pressed"]

@@ -27,3 +27,7 @@ RESULT_DEALER_BUST,Dealer busts. You win $%d.,Перебор у дилера. В
 RESULT_PLAYER_WINS,You win $%d.,Вы выиграли $%d.
 RESULT_DEALER_WINS,Dealer wins.,Дилер выиграл.
 RESULT_PUSH,Push.,Ничья.
+LEAVE_TABLE_TITLE,Leave Table?,Покинуть стол?
+LEAVE_TABLE_MESSAGE,You will lose all your progress if you go to the main menu.,"Если вы вернётесь в главное меню, весь прогресс будет потерян."
+YES,YES,ДА
+CANCEL,CANCEL,ОТМЕНА
