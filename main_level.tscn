@@ -141,7 +141,7 @@ horizontal_alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 180)
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 4
 mouse_filter = 2
 theme_override_constants/separation = 16
 alignment = 1
@@ -165,7 +165,7 @@ alignment = 1
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 180)
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_vertical = 4
 mouse_filter = 2
 theme_override_constants/separation = 16
 alignment = 1
@@ -326,32 +326,26 @@ volume_db = -25.0
 [node name="SfxBet" type="AudioStreamPlayer" parent="Audio/SfxGroup" unique_id=1810837497]
 unique_name_in_owner = true
 stream = ExtResource("6_uhmka")
-volume_db = -25.0
 
 [node name="SfxDeal" type="AudioStreamPlayer" parent="Audio/SfxGroup" unique_id=1998465872]
 unique_name_in_owner = true
 stream = ExtResource("7_5fjre")
-volume_db = -25.0
 
 [node name="SfxFlip" type="AudioStreamPlayer" parent="Audio/SfxGroup" unique_id=1800166298]
 unique_name_in_owner = true
 stream = ExtResource("8_oeaww")
-volume_db = -25.0
 
 [node name="SfxWin" type="AudioStreamPlayer" parent="Audio/SfxGroup" unique_id=255887448]
 unique_name_in_owner = true
 stream = SubResource("AudioStreamWAV_htena")
-volume_db = -25.0
 
 [node name="SfxLose" type="AudioStreamPlayer" parent="Audio/SfxGroup" unique_id=322636051]
 unique_name_in_owner = true
 stream = ExtResource("10_aonjr")
-volume_db = -25.0
 
 [node name="SfxPush" type="AudioStreamPlayer" parent="Audio/SfxGroup" unique_id=1636455283]
 unique_name_in_owner = true
 stream = ExtResource("11_do8ha")
-volume_db = -25.0
 
 [node name="CreditDialog" type="ColorRect" parent="." unique_id=157764009]
 unique_name_in_owner = true
@@ -465,8 +459,8 @@ autowrap_mode = 3
 
 [node name="Buttons" type="HBoxContainer" parent="ConfirmLeaveDialog/Center/Panel/Margin/Box" unique_id=340815807]
 layout_mode = 2
-alignment = 1
 theme_override_constants/separation = 16
+alignment = 1
 
 [node name="CancelButton" type="Button" parent="ConfirmLeaveDialog/Center/Panel/Margin/Box/Buttons" unique_id=340815808]
 custom_minimum_size = Vector2(140, 56)

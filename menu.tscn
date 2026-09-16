@@ -112,7 +112,6 @@ stop_when_disabled = true
 [node name="Music" type="AudioStreamPlayer" parent="Audio/MusicGroup" unique_id=1971161163]
 unique_name_in_owner = true
 stream = ExtResource("3_4hy44")
-volume_db = -30.0
 parameters/looping = true
 
 [node name="SfxGroup" type="Node" parent="Audio" unique_id=340815751]
@@ -122,7 +121,6 @@ script = ExtResource("4_sndgrp")
 [node name="SfxClick" type="AudioStreamPlayer" parent="Audio/SfxGroup" unique_id=1292317205]
 unique_name_in_owner = true
 stream = ExtResource("3_mae5d")
-volume_db = -25.0
 
 [node name="SettingsDialog" type="ColorRect" parent="." unique_id=340815727]
 unique_name_in_owner = true

@@ -79,7 +79,6 @@ func _ready() -> void:
 	session_message.text = tr("CREDIT_MESSAGE")
 	credit_dialog.visible = true
 	_on_phase_changed(flow.Phase.CREDIT)
-	music.volume_db = -25.0
 	music.play()
 	music_group.set_enabled(AudioSettings.music_enabled)
 	sfx_group.set_enabled(AudioSettings.sound_enabled)
