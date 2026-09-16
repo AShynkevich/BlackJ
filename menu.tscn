@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://dioww2proiaw2" path="res://menu.gd" id="1_ouk20"]
 [ext_resource type="AudioStream" uid="uid://bta0bbauxk7lf" path="res://assets/audio/menu_music.mp3" id="3_4hy44"]
 [ext_resource type="AudioStream" uid="uid://csespuve1w737" path="res://assets/audio/click3.wav" id="3_mae5d"]
+[ext_resource type="Script" uid="uid://ci4ae8vehwroh" path="res://scripts/sound_group.gd" id="4_sndgrp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ncy80"]
 bg_color = Color(0.53949934, 0.4693563, 0.19943395, 1)
@@ -11,6 +12,18 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
+bg_color = Color(0.12, 0.12, 0.12, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.81960785, 0.7294118, 0.38039216, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
 
 [node name="Control" type="Control" unique_id=1553208593]
 layout_mode = 3
@@ -68,6 +81,16 @@ theme_override_styles/hover = SubResource("StyleBoxFlat_ncy80")
 theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ncy80")
 text = "START"
 
+[node name="SettingsButton" type="Button" parent="SafeArea/Center/MenuColumn" unique_id=340815726]
+custom_minimum_size = Vector2(200, 72)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_ncy80")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ncy80")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ncy80")
+text = "SETTINGS"
+
 [node name="ExitButton" type="Button" parent="SafeArea/Center/MenuColumn" unique_id=1596274198]
 custom_minimum_size = Vector2(200, 72)
 layout_mode = 2
@@ -79,15 +102,134 @@ theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_ncy80")
 text = "EXIT"
 
 [node name="Audio" type="Node" parent="." unique_id=2105148466]
+script = ExtResource("4_sndgrp")
 
-[node name="Music" type="AudioStreamPlayer" parent="Audio" unique_id=1971161163]
+[node name="MusicGroup" type="Node" parent="Audio" unique_id=340815750]
+unique_name_in_owner = true
+script = ExtResource("4_sndgrp")
+stop_when_disabled = true
+
+[node name="Music" type="AudioStreamPlayer" parent="Audio/MusicGroup" unique_id=1971161163]
 unique_name_in_owner = true
 stream = ExtResource("3_4hy44")
+volume_db = -30.0
 parameters/looping = true
 
-[node name="SfxClick" type="AudioStreamPlayer" parent="Audio" unique_id=1292317205]
+[node name="SfxGroup" type="Node" parent="Audio" unique_id=340815751]
+unique_name_in_owner = true
+script = ExtResource("4_sndgrp")
+
+[node name="SfxClick" type="AudioStreamPlayer" parent="Audio/SfxGroup" unique_id=1292317205]
 unique_name_in_owner = true
 stream = ExtResource("3_mae5d")
+volume_db = -25.0
+
+[node name="SettingsDialog" type="ColorRect" parent="." unique_id=340815727]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.4862745)
+
+[node name="Center" type="CenterContainer" parent="SettingsDialog" unique_id=340815728]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="PanelContainer" parent="SettingsDialog/Center" unique_id=340815729]
+custom_minimum_size = Vector2(320, 280)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
+
+[node name="Margin" type="MarginContainer" parent="SettingsDialog/Center/Panel" unique_id=340815730]
+layout_mode = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 24
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 24
+
+[node name="Box" type="VBoxContainer" parent="SettingsDialog/Center/Panel/Margin" unique_id=340815731]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="SettingsDialog/Center/Panel/Margin/Box" unique_id=340815732]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
+theme_override_font_sizes/font_size = 28
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="MusicRow" type="HBoxContainer" parent="SettingsDialog/Center/Panel/Margin/Box" unique_id=340815733]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="MusicLabel" type="Label" parent="SettingsDialog/Center/Panel/Margin/Box/MusicRow" unique_id=340815734]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
+theme_override_font_sizes/font_size = 22
+text = "Music"
+
+[node name="MusicToggle" type="CheckButton" parent="SettingsDialog/Center/Panel/Margin/Box/MusicRow" unique_id=340815735]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+
+[node name="SoundRow" type="HBoxContainer" parent="SettingsDialog/Center/Panel/Margin/Box" unique_id=340815736]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="SoundLabel" type="Label" parent="SettingsDialog/Center/Panel/Margin/Box/SoundRow" unique_id=340815737]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
+theme_override_font_sizes/font_size = 22
+text = "Sound Effects"
+
+[node name="SoundToggle" type="CheckButton" parent="SettingsDialog/Center/Panel/Margin/Box/SoundRow" unique_id=340815738]
+unique_name_in_owner = true
+layout_mode = 2
+button_pressed = true
+
+[node name="LanguageRow" type="HBoxContainer" parent="SettingsDialog/Center/Panel/Margin/Box" unique_id=340815739]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="LanguageLabel" type="Label" parent="SettingsDialog/Center/Panel/Margin/Box/LanguageRow" unique_id=340815740]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
+theme_override_font_sizes/font_size = 22
+text = "Language"
+
+[node name="LanguageOption" type="OptionButton" parent="SettingsDialog/Center/Panel/Margin/Box/LanguageRow" unique_id=340815741]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(140, 0)
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="SettingsDialog/Center/Panel/Margin/Box" unique_id=340815742]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 56)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
+theme_override_font_sizes/font_size = 28
+theme_override_styles/normal = SubResource("StyleBoxFlat_ncy80")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ncy80")
+theme_override_styles/hover = SubResource("StyleBoxFlat_ncy80")
+text = "CLOSE"
 
 [connection signal="pressed" from="SafeArea/Center/MenuColumn/StartButton" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="SafeArea/Center/MenuColumn/SettingsButton" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="SafeArea/Center/MenuColumn/ExitButton" to="." method="_on_exit_pressed"]
+[connection signal="toggled" from="SettingsDialog/Center/Panel/Margin/Box/MusicRow/MusicToggle" to="." method="_on_music_toggled"]
+[connection signal="toggled" from="SettingsDialog/Center/Panel/Margin/Box/SoundRow/SoundToggle" to="." method="_on_sound_toggled"]
+[connection signal="item_selected" from="SettingsDialog/Center/Panel/Margin/Box/LanguageRow/LanguageOption" to="." method="_on_language_selected"]
+[connection signal="pressed" from="SettingsDialog/Center/Panel/Margin/Box/CloseButton" to="." method="_on_settings_close_pressed"]

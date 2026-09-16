@@ -88,8 +88,9 @@ Classic Blackjack, one player vs a computer dealer. Locked for the first playabl
 ### Main menu (`menu.tscn` + `menu.gd`)
 
 - Full-screen dark background (`ColorRect`).
-- Logo `assets/bj_logo.png` in a centered column with START / EXIT.
+- Logo `assets/bj_logo.png` in a centered column with START / SETTINGS / EXIT.
 - **START** → `main_level.tscn`.
+- **SETTINGS** → opens `SettingsDialog` (music toggle, sound toggle, language option, CLOSE).
 - **EXIT** → `get_tree().quit()`.
 - Button styles are set by hand (gold `StyleBoxFlat`, dark text).
 
@@ -107,8 +108,23 @@ Classic Blackjack, one player vs a computer dealer. Locked for the first playabl
 - If credit hits **$0**, NEXT is hidden. The same session modal says the player is out of credit; OK returns to `menu.tscn`.
 - Session phase enum lives on `BlackjackFlow`: Credit → Betting → PlayerTurn → DealerTurn → Resolve.
 - `BlackjackFlow` owns credit, bets, hands, and who acts. It emits signals; `main_level.gd` only builds buttons and `CardUI`.
+- `round_resolved(outcome: BlackjackFlow.Outcome, amount: int)` carries a stable outcome enum, not English text. `main_level.gd` maps `Outcome` → localization key (`RESULT_KEYS`) and decides the win/lose/push SFX from `WIN_OUTCOMES` / `PUSH_OUTCOMES`, instead of sniffing substrings in the rendered text.
 - Rules live in `scripts/blackjack_rules.gd` (`BlackjackRules`): soft Ace total, natural, bust, dealer hit-below-17.
 - Adaptive layout: padded `SafeArea`, vertical table stack, horizontal bet row, shoe inset on the right.
+
+### Audio settings (`scripts/audio_settings.gd`, `scripts/sound_group.gd`)
+
+- `AudioSettings` is an autoload: single source of truth for `music_enabled` / `sound_enabled`, shared across scenes, with `music_enabled_changed` / `sound_enabled_changed` signals.
+- `SoundGroup` (`class_name`, Composite) mutes/unmutes every `AudioStreamPlayer` leaf (or nested `SoundGroup`) under it with one `set_enabled(bool)` call.
+- Each scene's `Audio` node is a `SoundGroup` with two child groups, `MusicGroup` and `SfxGroup`; each `_ready()` applies the current `AudioSettings` values to its own groups. `menu.gd` also connects to the signals so the toggles in `SettingsDialog` apply live, and syncs the `CheckButton`s to the current state on open.
+- `MusicGroup` nodes set `stop_when_disabled = true`: disabling music calls `player.stop()` (no CPU spent decoding), re-enabling calls `.play()` again from the top. `SfxGroup` keeps volume-based muting (cheap one-shots, no per-call-site `if` checks needed).
+
+### Localization (`localization/ui.csv`)
+
+- CSV translation source, columns `keys,en,ru`, imported by Godot into `localization/ui.en.translation` / `localization/ui.ru.translation` and registered in `project.godot` (`internationalization/locale/translations`, fallback `en`).
+- Static button/label text (`START`, `HIT`, `STAND`, …) is the translation key itself; Godot's `Control` auto-translate applies it with no code changes.
+- Text built at runtime with a dynamic value (credit, bet, scores, round result) goes through `tr(KEY) % value` in `main_level.gd`; keys keep the `%d` placeholder so translators know an amount is substituted.
+- `menu.gd`'s `LanguageOption` calls `TranslationServer.set_locale("en"/"ru")` on `item_selected`; `_ready()` preselects the option matching the current `TranslationServer.get_locale()`, defaulting to English. The language names themselves ("English", "Русский") are not translated — a language names itself in the picker.
 
 ### Card data (`scripts/card_data.gd`)
 
@@ -159,14 +175,14 @@ Soft Ace (11 ↔ 1) is applied in `BlackjackRules.hand_total`, not on the resour
 | `assets/audio/click3.wav`, `assets/audio/click.wav` | UI click (menu, table) |
 | `assets/audio/bet.ogg`, `assets/audio/deal.ogg`, `assets/audio/flip.ogg` | Bet chosen, card deal flight, card flip |
 | `assets/audio/win.wav`, `assets/audio/lose.wav`, `assets/audio/push.wav` | Round result stingers |
+| `localization/ui.csv` | Translation source (`keys,en,ru`); imports to `localization/ui.en.translation` / `ui.ru.translation` |
 
 Keep the matching `.import` files in git. Compiled `.ctex` files live under `.godot/` and stay out of the repo.
 
 ## What is not done yet
 
 - Duel mode.
-- Audio: menu music, table SFX, and result stingers play; table background music is wired (stream assigned, loop on) but its `music.play()` call is left commented in `main_level.gd` for now.
-- Localization, saves.
+- Saves: `AudioSettings` is in-memory only, resets each run; selected language also resets to the OS/system default each run (not persisted).
 - Export presets: `export_presets.cfg` has macOS and Android presets defined; signing identities and templates are not filled in.
 
 ## Scene map
@@ -197,7 +213,7 @@ main_level.tscn
 
 ## Conventions for later work
 
-- Engine: Godot 4.7, GDScript. `CardData`, `CardUI`, and `BlackjackRules` have `class_name`.
+- Engine: Godot 4.7, GDScript. `CardData`, `CardUI`, `BlackjackRules`, `BlackjackFlow`, and `SoundGroup` have `class_name`.
 - Architecture skills (always on): DRY/YAGNI/KISS, SOLID, game-dev patterns — `.cursor/skills/`.
 - Write comments, docs, and commit messages in English.
 - Commit `*.gd.uid` and `*.import` next to their sources. Do not gitignore `*.uid`.
@@ -206,6 +222,7 @@ main_level.tscn
 - Keep Blackjack rules out of menu scenes. Session flow is `blackjack_flow.gd`; totals and dealer hit-below-17 are `blackjack_rules.gd`.
 - Do not add a second `deck_manager.gd` in the project root.
 - Dealer AI may use only the dealer hand and the hit-below-17 rule.
+- New UI text needs a key in `localization/ui.csv` (`en` + `ru` columns), then re-import so `localization/ui.*.translation` regenerate. Static control text (button/label) just needs the key to equal the node's `text`; dynamic text goes through `tr(KEY) % value` in code.
 - Next sensible step: Duel as a separate mode.
 
 ## Git
