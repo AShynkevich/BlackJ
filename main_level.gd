@@ -35,6 +35,8 @@ var _flight_layer: Control
 @onready var result_label: Label = $%ResultLabel
 @onready var credit_dialog: ColorRect = $%CreditDialog
 @onready var session_message: Label = $%Message
+@onready var confirm_leave_dialog: ColorRect = $%ConfirmLeaveDialog
+@onready var confirm_leave_message: Label = $%ConfirmMessage
 @onready var deck_pile: Control = $%DeckPile
 @onready var bet_panel: HBoxContainer = $%BetPanel
 @onready var deal_button: Button = $%DealButton
@@ -77,7 +79,6 @@ func _ready() -> void:
 	session_message.text = tr("CREDIT_MESSAGE")
 	credit_dialog.visible = true
 	_on_phase_changed(flow.Phase.CREDIT)
-	music.volume_db = -25.0
 	music.play()
 	music_group.set_enabled(AudioSettings.music_enabled)
 	sfx_group.set_enabled(AudioSettings.sound_enabled)
@@ -109,7 +110,7 @@ func _make_table_button(text: String, min_size: Vector2) -> Button:
 
 func _on_credit_ok_pressed() -> void:
 	if flow.phase != flow.Phase.CREDIT:
-		_on_main_menu_pressed()
+		_go_to_main_menu()
 		return
 	sfx_click.play()
 	credit_label.visible = true
@@ -340,4 +341,19 @@ func _refresh_bet_buttons() -> void:
 
 func _on_main_menu_pressed() -> void:
 	sfx_click.play()
+	confirm_leave_message.text = tr("LEAVE_TABLE_MESSAGE")
+	confirm_leave_dialog.visible = true
+
+
+func _on_confirm_leave_yes_pressed() -> void:
+	sfx_click.play()
+	_go_to_main_menu()
+
+
+func _on_confirm_leave_cancel_pressed() -> void:
+	sfx_click.play()
+	confirm_leave_dialog.visible = false
+
+
+func _go_to_main_menu() -> void:
 	get_tree().change_scene_to_file("res://menu.tscn")
