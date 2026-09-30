@@ -15,15 +15,15 @@ corner_radius_bottom_left = 10
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dialog"]
 bg_color = Color(0.12, 0.12, 0.12, 0.96)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
 border_color = Color(0.81960785, 0.7294118, 0.38039216, 1)
-corner_radius_top_left = 12
-corner_radius_top_right = 12
-corner_radius_bottom_right = 12
-corner_radius_bottom_left = 12
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
 
 [node name="Control" type="Control" unique_id=1553208593]
 layout_mode = 3
@@ -142,83 +142,106 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="PanelContainer" parent="SettingsDialog/Center" unique_id=340815729]
-custom_minimum_size = Vector2(320, 280)
+custom_minimum_size = Vector2(640, 560)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_dialog")
 
 [node name="Margin" type="MarginContainer" parent="SettingsDialog/Center/Panel" unique_id=340815730]
 layout_mode = 2
-theme_override_constants/margin_left = 24
-theme_override_constants/margin_top = 24
-theme_override_constants/margin_right = 24
-theme_override_constants/margin_bottom = 24
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 48
 
 [node name="Box" type="VBoxContainer" parent="SettingsDialog/Center/Panel/Margin" unique_id=340815731]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 32
 
 [node name="Title" type="Label" parent="SettingsDialog/Center/Panel/Margin/Box" unique_id=340815732]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 56
 text = "SETTINGS"
 horizontal_alignment = 1
 
 [node name="MusicRow" type="HBoxContainer" parent="SettingsDialog/Center/Panel/Margin/Box" unique_id=340815733]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 32
 
 [node name="MusicLabel" type="Label" parent="SettingsDialog/Center/Panel/Margin/Box/MusicRow" unique_id=340815734]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 44
 text = "Music"
 
-[node name="MusicToggle" type="CheckButton" parent="SettingsDialog/Center/Panel/Margin/Box/MusicRow" unique_id=340815735]
-unique_name_in_owner = true
+[node name="MusicToggleSlot" type="Control" parent="SettingsDialog/Center/Panel/Margin/Box/MusicRow" unique_id=340815743]
+custom_minimum_size = Vector2(160, 96)
 layout_mode = 2
+size_flags_vertical = 4
+
+[node name="MusicToggle" type="CheckButton" parent="SettingsDialog/Center/Panel/Margin/Box/MusicRow/MusicToggleSlot" unique_id=340815735]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 24)
+layout_mode = 0
+offset_left = 52.0
+offset_top = 17.0
+offset_right = 96.0
+offset_bottom = 41.0
+scale = Vector2(3, 3)
 button_pressed = true
 
 [node name="SoundRow" type="HBoxContainer" parent="SettingsDialog/Center/Panel/Margin/Box" unique_id=340815736]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 32
 
 [node name="SoundLabel" type="Label" parent="SettingsDialog/Center/Panel/Margin/Box/SoundRow" unique_id=340815737]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 44
 text = "Sound Effects"
 
-[node name="SoundToggle" type="CheckButton" parent="SettingsDialog/Center/Panel/Margin/Box/SoundRow" unique_id=340815738]
-unique_name_in_owner = true
+[node name="SoundToggleSlot" type="Control" parent="SettingsDialog/Center/Panel/Margin/Box/SoundRow" unique_id=340815744]
+custom_minimum_size = Vector2(160, 96)
 layout_mode = 2
+size_flags_vertical = 4
+
+[node name="SoundToggle" type="CheckButton" parent="SettingsDialog/Center/Panel/Margin/Box/SoundRow/SoundToggleSlot" unique_id=340815738]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 24)
+layout_mode = 0
+offset_left = 52.0
+offset_top = 17.0
+offset_right = 96.0
+offset_bottom = 41.0
+scale = Vector2(3, 3)
 button_pressed = true
 
 [node name="LanguageRow" type="HBoxContainer" parent="SettingsDialog/Center/Panel/Margin/Box" unique_id=340815739]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 32
 
 [node name="LanguageLabel" type="Label" parent="SettingsDialog/Center/Panel/Margin/Box/LanguageRow" unique_id=340815740]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.95, 0.88, 0.55, 1)
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 44
 text = "Language"
 
 [node name="LanguageOption" type="OptionButton" parent="SettingsDialog/Center/Panel/Margin/Box/LanguageRow" unique_id=340815741]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(140, 0)
+custom_minimum_size = Vector2(280, 0)
 layout_mode = 2
+theme_override_font_sizes/font_size = 44
 
 [node name="CloseButton" type="Button" parent="SettingsDialog/Center/Panel/Margin/Box" unique_id=340815742]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(160, 56)
+custom_minimum_size = Vector2(320, 112)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.07450981, 0.07450981, 0.07450981, 1)
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 56
 theme_override_styles/normal = SubResource("StyleBoxFlat_ncy80")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_ncy80")
 theme_override_styles/hover = SubResource("StyleBoxFlat_ncy80")
@@ -227,7 +250,7 @@ text = "CLOSE"
 [connection signal="pressed" from="SafeArea/Center/MenuColumn/StartButton" to="." method="_on_start_pressed"]
 [connection signal="pressed" from="SafeArea/Center/MenuColumn/SettingsButton" to="." method="_on_settings_pressed"]
 [connection signal="pressed" from="SafeArea/Center/MenuColumn/ExitButton" to="." method="_on_exit_pressed"]
-[connection signal="toggled" from="SettingsDialog/Center/Panel/Margin/Box/MusicRow/MusicToggle" to="." method="_on_music_toggled"]
-[connection signal="toggled" from="SettingsDialog/Center/Panel/Margin/Box/SoundRow/SoundToggle" to="." method="_on_sound_toggled"]
+[connection signal="toggled" from="SettingsDialog/Center/Panel/Margin/Box/MusicRow/MusicToggleSlot/MusicToggle" to="." method="_on_music_toggled"]
+[connection signal="toggled" from="SettingsDialog/Center/Panel/Margin/Box/SoundRow/SoundToggleSlot/SoundToggle" to="." method="_on_sound_toggled"]
 [connection signal="item_selected" from="SettingsDialog/Center/Panel/Margin/Box/LanguageRow/LanguageOption" to="." method="_on_language_selected"]
 [connection signal="pressed" from="SettingsDialog/Center/Panel/Margin/Box/CloseButton" to="." method="_on_settings_close_pressed"]

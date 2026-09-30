@@ -30,7 +30,6 @@ window/stretch/aspect="expand"
 [internationalization]
 
 locale/translations=PackedStringArray("res://localization/ui.en.translation", "res://localization/ui.ru.translation")
-locale/fallback="en"
 
 [physics]
 
